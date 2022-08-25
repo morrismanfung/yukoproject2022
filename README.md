@@ -64,3 +64,15 @@ Using the abovementioned threshold, the performance is promising. The precision 
 
 While we cannot be perfect in predicting horse racing results, we need to consider the frequency of losses as it will seriously affect our bankroll. Thus, we decided to bet 10% of the bankroll every time the model predicts that a horse will win a race. The percentage is tentative right now due to 2 reasons. First, it is an arbitrary number without any support with statistics. Secondly, as the bankroll increases, the betting percentage has to be reduced as the bet will be heavily affecting the odds when it is large enough.
 
+## Betting in Hastings
+
+We are currently testing the generalizability of the model to other racecourse. Below is our betting history in Hastings Racecourse, Vacouver.
+
+| Date | RaceNo | HorseNo | HorseName | Bet | Win | Acc. |
+| ---- |--------|--------|------------|-----|-----|------|
+|8/22  |3       |2       |Be Quick    |1    |3.2  |3.2   |
+|8/22  |5       |8       |Legacy Square|1   |0    |2.2   |
+
+| Total Betting Amount | Total Earning |
+| -------------------- | -------------- |
+|2                     |3.2|
