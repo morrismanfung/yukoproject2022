@@ -72,7 +72,9 @@ We are currently testing the generalizability of the model to other racecourse. 
 | ---- |--------|--------|------------|-----|-----|------|
 |8/22  |3       |2       |Be Quick    |1    |3.2  |3.2   |
 |8/22  |5       |8       |Legacy Square|1   |0    |2.2   |
+|8/29  |1       |2       |Coulterberry |1   |3.9  |5.1   |
+|8/22  |3       |3       |Viva La Vino|1    |0    |5.1   |
 
 | Total Betting Amount | Total Earning |
-| -------------------- | -------------- |
-|2                     |3.2|
+| -------------------- | ------------- |
+|4                     |5.1            |
