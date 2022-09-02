@@ -66,8 +66,9 @@ While we cannot be perfect in predicting horse racing results, we need to consid
 
 ## Betting in Hastings
 
-We are currently testing the generalizability of the model to other racecourse. Below is our betting history in Hastings Racecourse, Vacouver.
+We are currently testing the generalizability of the model to other racecourse. Below is our betting history in the Hastings Racecourse and the Woodbine Racecourse in Vancouver.
 
+### Hastings
 | Date | RaceNo | HorseNo | HorseName | Bet | Win | Acc. |
 | ---- |--------|--------|------------|-----|-----|------|
 |8/22  |3       |2       |Be Quick    |1    |3.2  |3.2   |
@@ -75,6 +76,11 @@ We are currently testing the generalizability of the model to other racecourse. 
 |8/29  |1       |2       |Coulterberry |1   |3.9  |5.1   |
 |8/22  |3       |3       |Viva La Vino|1    |0    |5.1   |
 
+### Woodbine
+| Date | RaceNo | HorseNo | HorseName | Bet | Win | Acc. |
+| ---- |--------|--------|------------|-----|-----|------|
+|9/2   |4       |4       |The Great Oz|1    |7.5  |7.5   |
+
 | Total Betting Amount | Total Earning |
 | -------------------- | ------------- |
-|4                     |5.1            |
+|5                     |12.6           |
