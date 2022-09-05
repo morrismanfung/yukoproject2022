@@ -80,7 +80,8 @@ We are currently testing the generalizability of the model to other racecourse. 
 | Date | RaceNo | HorseNo | HorseName | Bet | Win | Acc. |
 | ---- |--------|--------|------------|-----|-----|------|
 |9/2   |4       |4       |The Great Oz|1    |7.5  |7.5   |
+|9/5   |6       |8       |Stormy Silence|1  |0    |7.5   |
 
 | Total Betting Amount | Total Earning |
 | -------------------- | ------------- |
-|5                     |12.6           |
+|6                     |12.6           |
