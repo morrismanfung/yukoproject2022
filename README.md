@@ -69,18 +69,19 @@ While we cannot be perfect in predicting horse racing results, we need to consid
 We are currently testing the generalizability of the model to other racecourse. Below is our betting history in the Hastings Racecourse and the Woodbine Racecourse in Vancouver.
 
 ### Hastings
-| Date | RaceNo | HorseNo | HorseName | Bet | Win | Acc. |
-| ---- |--------|--------|------------|-----|-----|------|
-|8/22  |3       |2       |Be Quick    |1    |3.2  |3.2   |
-|8/22  |5       |8       |Legacy Square|1   |0    |2.2   |
-|8/29  |1       |2       |Coulterberry |1   |3.9  |5.1   |
-|8/22  |3       |3       |Viva La Vino|1    |0    |5.1   |
+| Date | RaceNo | HorseNo | HorseName | ModelOutput | Bet | Win | Acc. |
+| ---- |--------|--------|------------|-------------|-----|-----|------|
+|8/22  |3       |2       |Be Quick    |0.61         |1    |3.2  |3.2   |
+|8/22  |5       |8       |Legacy Square|0.58        |1   |0    |2.2   |
+|8/29  |1       |2       |Coulterberry|-            |1   |3.9  |5.1   |
+|8/30  |3       |3       |Viva La Vino|0.60         |1    |0    |5.1   |
 
 ### Woodbine
-| Date | RaceNo | HorseNo | HorseName | Bet | Win | Acc. |
-| ---- |--------|--------|------------|-----|-----|------|
-|9/2   |4       |4       |The Great Oz|1    |7.5  |7.5   |
-|9/5   |6       |8       |Stormy Silence|1  |0    |7.5   |
+| Date | RaceNo | HorseNo | HorseName | ModelOutput | Bet | Win | Acc. |
+| ---- |--------|--------|------------|-------------|-----|-----|------|
+|9/2   |4       |4       |The Great Oz|0.57         |1    |7.5  |7.5   |
+|9/4   |6       |8       |Stormy Silence|0.42       |1    |0    |7.5   |
+|9/5   |7       |4       |P F Factor  |0.40         |1    |?    |?     |
 
 | Total Betting Amount | Total Earning |
 | -------------------- | ------------- |
