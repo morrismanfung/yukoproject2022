@@ -66,7 +66,7 @@ While we cannot be perfect in predicting horse racing results, we need to consid
 
 ## Betting in Hastings
 
-We are currently testing the generalizability of the model to other racecourse. Below is our betting history in the Hastings Racecourse and the Woodbine Racecourse in Vancouver.
+We are currently testing the generalizability of the model to other racecourse. Below is our betting history in the Hastings Racecourse in Vancouver and the Woodbine Racecourse in Toronto.
 
 ### Hastings
 | Date | RaceNo | HorseNo | HorseName | ModelOutput | Bet | Win | Acc. |
