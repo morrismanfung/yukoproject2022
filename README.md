@@ -81,8 +81,8 @@ We are currently testing the generalizability of the model to other racecourse. 
 | ---- |--------|--------|------------|-------------|-----|-----|------|
 |9/2   |4       |4       |The Great Oz|0.57         |1    |7.5  |7.5   |
 |9/4   |6       |8       |Stormy Silence|0.42       |1    |0    |7.5   |
-|9/5   |7       |4       |P F Factor  |0.40         |1    |?    |?     |
+|9/5   |7       |4       |P F Factor  |0.40         |1    |3.9  |11.4  |
 
 | Total Betting Amount | Total Earning |
 | -------------------- | ------------- |
-|6                     |12.6           |
+|7                     |16.5           |
