@@ -75,6 +75,9 @@ We are currently testing the generalizability of the model to other racecourse. 
 |8/22  |5       |8       |Legacy Square|0.58        |1   |0    |2.2   |
 |8/29  |1       |2       |Coulterberry|-            |1   |3.9  |5.1   |
 |8/30  |3       |3       |Viva La Vino|0.60         |1    |0    |5.1   |
+|9/10  |2       |1       |Infinite Patiencey|0.58   |1   |1.1  |6.2   |
+|9/10  |5       |1       |Porter Gent|0.47          |1    |2   |8.2   |
+
 
 ### Woodbine
 | Date | RaceNo | HorseNo | HorseName | ModelOutput | Bet | Win | Acc. |
@@ -82,7 +85,8 @@ We are currently testing the generalizability of the model to other racecourse. 
 |9/2   |4       |4       |The Great Oz|0.57         |1    |7.5  |7.5   |
 |9/4   |6       |8       |Stormy Silence|0.42       |1    |0    |7.5   |
 |9/5   |7       |4       |P F Factor  |0.40         |1    |3.9  |11.4  |
+|9/10  |6       |6       |Millie Girl |0.41         |1    |0    |11.4   |
 
 | Total Betting Amount | Total Earning |
 | -------------------- | ------------- |
-|7                     |16.5           |
+|10                    |19.6           |
