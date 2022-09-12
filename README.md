@@ -86,7 +86,8 @@ We are currently testing the generalizability of the model to other racecourse. 
 |9/4   |6       |8       |Stormy Silence|0.42       |1    |0    |7.5   |
 |9/5   |7       |4       |P F Factor  |0.40         |1    |3.9  |11.4  |
 |9/10  |6       |6       |Millie Girl |0.41         |1    |0    |11.4   |
+|9/11  |8       |5       |Whimsical Dance|0.60      |1    |0    |11.4
 
 | Total Betting Amount | Total Earning |
 | -------------------- | ------------- |
-|10                    |19.6           |
+|11                    |19.6           |
