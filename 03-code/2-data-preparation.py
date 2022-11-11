@@ -2,12 +2,12 @@ import numpy as np
 import pandas as pd
 
 # ---------- Data importation ----------
-df_race = pd.read_csv( '01-data\\01-historical\\data_Races_raw_RH_2022_0910.csv')
-df_horse_current = pd.read_csv( '01-data\\01-historical\\HorseBasicsInformation.csv')
-df_horse_retired = pd.read_csv( '01-data\\01-historical\\HorseBasicsInformation_retired.csv')
+df_race = pd.read_csv( '01-data\\data_Races_raw_RH_2022_0910.csv')
+df_horse_current = pd.read_csv( '01-data\\basic-horse.csv')
+df_horse_retired = pd.read_csv( '01-data\\basic-horse-retired.csv')
 df_horse = pd.concat( [ df_horse_current, df_horse_retired], axis = 0)
-df_jockey = pd.read_csv( '01-data\\01-historical\\Jockey.csv')
-df_trainer = pd.read_csv( '01-data\\01-historical\\Trainer.csv')
+df_jockey = pd.read_csv( '01-data\\basic-jockey.csv')
+df_trainer = pd.read_csv( '01-data\\basic-trainer.csv')
 
 ## ---------- Races ----------
 columns_race = [
@@ -131,38 +131,4 @@ for i in range( len( df_merged_jth)):
 # ---------- Output ----------
 df_merged_jth = df_merged_jth.replace( '--', 0)
 df_merged_jth = df_merged_jth.fillna( 0)
-df_merged_jth.to_csv( '01-data\\01-historical\\data_merged_jthr_RH_0910.csv', encoding = 'utf-8_sig')
-
-# ---------- Testing ----------
-i = 0
-
-HorseName = df_merged_jth.loc[ i, 'HorseName']
-Date = df_merged_jth.loc[ i, 'Date']
-
-tmp_table = pd.read_csv( f'01-data\\01-historical\\HorseSR\\{HorseName}.csv')
-
-tmp_table = tmp_table[ ['RDate', 'LastRace_nDays', 'PreviousPlace', 'AvgPlace3', 'AvgPlace5', 'RRating', 'WeightDiff']]
-tmp_table[ 'RDate'] = pd.to_datetime( tmp_table[ 'RDate'], format = '%Y-%m-%d')
-
-LastRace_nDays = tmp_table[ tmp_table[ 'RDate'] == Date].iloc[ 0, 1]
-PreviousPlace = tmp_table[ tmp_table[ 'RDate'] == Date].iloc[ 0, 2]
-AvgPlace3 = tmp_table[ tmp_table[ 'RDate'] == Date].iloc[ 0, 3]
-AvgPlace5 = tmp_table[ tmp_table[ 'RDate'] == Date].iloc[ 0, 4]
-UpdatedRating = tmp_table[ tmp_table[ 'RDate'] == Date].iloc[ 0, 5]
-WeightDiff = tmp_table[ tmp_table[ 'RDate'] == Date].iloc[ 0, 6]
-
-df_merged_jth.loc[ i, 'LastRace_nDays'] = LastRace_nDays
-df_merged_jth.loc[ i, 'PreviousPlace'] = PreviousPlace
-df_merged_jth.loc[ i, 'AvgPlace3'] = AvgPlace3
-df_merged_jth.loc[ i, 'AvgPlace5'] = AvgPlace5
-df_merged_jth.loc[ i, 'UpdatedRating'] = UpdatedRating
-df_merged_jth.loc[ i, 'WeightDiff'] = WeightDiff
-
-df_merged_jth.loc[ i, 'LastRace_nDays'] = 100
-df_merged_jth.loc[ i, 'PreviousPlace'] = 7
-df_merged_jth.loc[ i, 'AvgPlace3'] = 7
-df_merged_jth.loc[ i, 'AvgPlace5'] = 7
-df_merged_jth.loc[ i, 'UpdatedRating'] = 0
-df_merged_jth.loc[ i, 'WeightDiff'] = 0
-
-print( f'{i} rows updated.')
+df_merged_jth.to_csv( '01-data\\data-merged_20220910.csv', encoding = 'utf-8_sig')
