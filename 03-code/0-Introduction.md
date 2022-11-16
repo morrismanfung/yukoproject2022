@@ -1,5 +1,6 @@
-![header.png]
 # Introduction on code file
+
+![-](header.png)
 
 ## Preface
 
