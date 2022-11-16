@@ -39,3 +39,7 @@ The script reads the data from the scripts above and return a `.csv` file named 
 ## `3-normalization.py`
 
 The script reads the file `data-merged_yyyymmdd.csv` and normalizes the features based on the race each horse participated in. The normalized scores can be used as relative indexes of how a horse performs relative to other contestants in the same race.
+
+## `4-data-preparation-prediction`
+
+The script reads the file `00-future-input` in the folder `05-prediction` and returns a `.csv` file named `01-preprocessed_yyyymmdd` for prediction. The preprocessing steps are almost identical to those in `2-data-preparation`.
