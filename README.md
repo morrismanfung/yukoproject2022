@@ -1,3 +1,5 @@
+![header](06-img\header-README.jpg)
+
 # ゆうこ (Yuko) Project 2022
 
 The ゆうこ Project aims to generate long term positive return with horse betting with the Hong Kong Jockey Club (HKJC). We use web-scraping and a variety of machine learning methods to predict horse racing results. Using backtest data, the project can generate a 19,917% profit from November 21, 2021 to June 25, 2022.
