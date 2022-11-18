@@ -1,6 +1,6 @@
 # Introduction on code file
 
-![-](header.png)
+![header](../06-img/header-03-0.jpg)
 
 ## Preface
 
