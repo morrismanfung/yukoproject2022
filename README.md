@@ -87,4 +87,6 @@ Right now, we are only using the default thresholds for classification. In fact,
 
 Cross-validation is only based on precision score now. More comprehensive cross-validation can be done by including confusion matrixes so we can also inspect the cross-validation recall.
 
-Class imbalanced should be addressed by both straitified shuffling (in train-test splitting and cross-validation) and class weight in each model.
+Class imbalanced should be addressed by both straitified shuffling (in train-test splitting ) and class weight in each model.
+
+Feature selection can be performed based on feature importance. By visual inspection, it can be seen that many of the features carry only weights with small magnitude (<0.01).
