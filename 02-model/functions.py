@@ -1,13 +1,11 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.model_selection import cross_val_score, cross_validate, train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler, FunctionTransformer
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.compose import ColumnTransformer, make_column_transformer
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve
+from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve, precision_score, recall_score, f1_score
 import altair as alt
 alt.renderers.enable('mimetype')
 alt.data_transformers.enable('data_server')
@@ -41,3 +39,14 @@ def pr_curve( model, X_train, X_test, y_train, y_test):
         tooltip = 'thresholds'
     ).properties( height = 300, width = 300)
     return chart
+
+def log_func(x):
+    return np.log(x+1)
+
+def score_metrics( y_test, y_hat):
+    metrics = {
+        'precision': precision_score( y_test, y_hat),
+        'recall': recall_score( y_test, y_hat),
+        'f1': f1_score( y_test, y_hat)
+    }
+    return metrics
