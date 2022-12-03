@@ -1,13 +1,14 @@
-Makefile
-
 # Target: Dependencies
 #	Code
 
-# knn.joblib knn-opt.joblib: cleaned-data.csv knn.py column_transformer.joblib
-#	python knn.py
+01-data/test.csv:
+	python 02-model/dummy4make.py
 
-# svc.joblib svc-opt.joblib: cleaned-data.csv svc.py
-#	python svc.py
+02-model/01-saved-model/01-pipe_knn_opt.joblib 02-model/02-saved-scores/01-knn_dict.joblib: 02-model/03-knn.py 01-data/train.csv
+	python 02-model/03-knn.py
+
+svc-train: cleaned-data.csv 04-svc.py
+	python svc.py
 
 # rfc.joblib rfc-opt.joblib: cleaned-data.csv rfc.py
 #	python rfc.py

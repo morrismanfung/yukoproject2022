@@ -1,3 +1,7 @@
+# Author: Morris M. F. Chan
+# 2022-12-02
+# Usage: python 02-model/02-column-transformer.py
+
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score, cross_validate, train_test_split, GridSearchCV, RandomizedSearchCV
@@ -58,6 +62,8 @@ def if_in( raw, reference):
 def column_transformer_post_selection( X_train_transformed, y_train, cols):
     rfecv = RFE( LogisticRegression( max_iter = 10000, solver = 'saga', random_state = 918), n_features_to_select = 0.75)
     rfecv.fit( X_train_transformed, y_train)
+    print( len( rfecv.feature_names_in_[ rfecv.support_]))
+    print( rfecv.feature_names_in_[ rfecv.support_])
     cols_std = if_in( cols[ 'cols_std'], rfecv.feature_names_in_[ rfecv.support_])
     cols_log_std = if_in( cols[ 'cols_log_std'], rfecv.feature_names_in_[ rfecv.support_])
     cols_passthrough = if_in( cols[ 'cols_passthrough'], rfecv.feature_names_in_[ rfecv.support_])

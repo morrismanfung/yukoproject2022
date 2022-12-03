@@ -43,10 +43,34 @@ def pr_curve( model, X_train, X_test, y_train, y_test):
 def log_func(x):
     return np.log(x+1)
 
-def score_metrics( y_test, y_hat):
+def test_scoring_metrics( y_test, y_hat):
     metrics = {
         'precision': precision_score( y_test, y_hat),
         'recall': recall_score( y_test, y_hat),
         'f1': f1_score( y_test, y_hat)
     }
     return metrics
+
+def save_chart(chart, filename, scale_factor=1):
+    '''
+    Save an Altair chart using vl-convert
+    
+    Parameters
+    ----------
+    chart : altair.Chart
+        Altair chart to save
+    filename : str
+        The path to save the chart to
+    scale_factor: int or float
+        The factor to scale the image resolution by.
+        E.g. A value of `2` means two times the default resolution.
+    '''
+    if filename.split('.')[-1] == 'svg':
+        with open(filename, "w") as f:
+            f.write(vlc.vegalite_to_svg(chart.to_dict()))
+    elif filename.split('.')[-1] == 'png':
+        with open(filename, "wb") as f:
+            f.write(vlc.vegalite_to_png(chart.to_dict(), scale=scale_factor))
+    else:
+        raise ValueError("Only svg and png formats are supported")
+# Function by Joel Ostblom
