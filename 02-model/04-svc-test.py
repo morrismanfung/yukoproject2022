@@ -1,6 +1,6 @@
 # Author: Morris M. F. Chan
 # 2022-12-02
-# Usage: python 02-model/04-svc.py
+# Usage: python 02-model/04-svc-test.py
 
 import numpy as np
 import pandas as pd
@@ -26,7 +26,7 @@ def main():
 
     pipe_svc_opt = load( '02-model/01-saved-model/02-pipe_svc_opt.joblib')
 
-    svc_dict = load( '02-model/02-saved-scores/02-svc_dict.joblib')
+    svc_dict = load( '02-model/02-saved-scores/02-svc_dict_tmp.joblib')
 
     svc_dict[ 'test_scores'] = model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test)
 

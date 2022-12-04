@@ -67,7 +67,8 @@ def optimized_model( column_transformer, X_train, y_train, best_params, cv_scori
 def threshold_tuning( pipe_svc_opt, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
-    pr_curve( pipe_svc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
+    pr_curve_img = pr_curve( pipe_svc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
+    save_chart( pr_curve_img, '02-model/02-saved-scores/02-svc-pr-purve.png')
 
 if __name__ == '__main__':
     main()

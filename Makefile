@@ -4,27 +4,45 @@
 01-data/test.csv:
 	python 02-model/dummy4make.py
 
-02-model/01-saved-model/01-pipe_knn_opt.joblib 02-model/02-saved-scores/01-knn_dict.joblib: 02-model/03-knn.py 01-data/train.csv
+02-model/01-saved-model/01-pipe_knn_opt.joblib 02-model/02-saved-scores/01-knn_dict.joblib: 02-model/03-knn.py 01-data/train.csv 01-data/test.csv
 	python 02-model/03-knn.py
 
-svc-train: cleaned-data.csv 04-svc.py
-	python svc.py
+02-model/01-saved-model/02-pipe_svc_opt.joblib 02-model/02-saved-scores/02-svc_dict_tmp.joblib 02-model/02-saved-scores/02-svc-pr-purve.png: \
+	02-model/04-svc.py 01-data/train.csv
+	python 02-model/04-svc.py
 
-# rfc.joblib rfc-opt.joblib: cleaned-data.csv rfc.py
-#	python rfc.py
+02-model/02-saved-scores/02-svc_dict.joblib: \
+	02-model/04-svc-test.py 02-model/01-saved-model/02-pipe_svc_opt.joblib 01-data/train.csv 01-data/test.csv
+	python 02-model/04-svc-test.py
 
-# nb.joblib: cleaned-data.csv nb.py
-#	python nb.py
+02-model/01-saved-model/03-pipe_rfc_opt.joblib 02-model/02-saved-scores/03-rfc_dict_tmp.joblib 02-model/02-saved-scores/03-rfc-pr-purve.png: \
+	02-model/05-rfc.py 01-data/train.csv
+	python 02-model/05-rfc.py
 
-# logreg.joblib logreg-opt.joblib: cleaned-data.csv logreg.py
-#	python logreg.py
+02-model/02-saved-scores/03-rfc_dict.joblib: \
+	02-model/05-rfc-test.py 02-model/01-saved-model/03-pipe_rfc_opt.joblib 01-data/train.csv 01-data/test.csv
+	python 02-model/05-rfc-test.py
 
-# lsvc.joblib lsvc-opt.joblib: cleaned-data.csv lsvc.py
-#	python lsvc.py
+02-model/01-saved-model/04-pipe_nb.joblib 02-model/02-saved-scores/04-nb_dict_tmp.joblib 02-model/02-saved-scores/04-nb-pr-purve.png: \
+	02-model/06-nb.py 01-data/train.csv
+	python 02-model/06-nb.py
 
-# cross-validation.csv: knn.joblib knn-opt.joblib svc.joblib svc-opt.joblib \
-						rfc.joblib rfc-opt.joblib nb.joblib \
-						logreg.joblib logreg-opt.joblib lsvc.joblib lsvc-opt.joblib
-#	python cross-validation.py
+02-model/02-saved-scores/04-nb_dict.joblib: \
+	02-model/06-nb-test.py 02-model/01-saved-model/04-pipe_nb.joblib 01-data/train.csv 01-data/test.csv
+	python 02-model/06-nb-test.py
 
-# 
+02-model/01-saved-model/05-pipe_logreg_opt.joblib 02-model/02-saved-scores/05-logreg_dict_tmp.joblib 02-model/02-saved-scores/05-logreg-pr-purve.png: \
+	02-model/07-logreg.py 01-data/train.csv
+	python 02-model/07-logreg.py
+
+02-model/02-saved-scores/05-logreg_dict.joblib: \
+	02-model/07-logreg-test.py 02-model/01-saved-model/05-pipe_logreg_opt.joblib 01-data/train.csv 01-data/test.csv
+	python 02-model/07-logreg-test.py
+
+02-model/01-saved-model/06-pipe_lsvc_opt.joblib 02-model/02-saved-scores/06-lsvc_dict_tmp.joblib 02-model/02-saved-scores/06-lsvc-pr-purve.png: \
+	02-model/08-lsvc.py 01-data/train.csv
+	python 02-model/08-lsvc.py
+
+02-model/02-saved-scores/06-lsvc_dict.joblib: \
+	02-model/08-lsvc-test.py 02-model/01-saved-model/06-pipe_lsvc_opt.joblib 01-data/train.csv 01-data/test.csv
+	python 02-model/08-lsvc-test.py
