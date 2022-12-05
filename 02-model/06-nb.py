@@ -15,6 +15,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import RFE
 from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve
 from joblib import dump, load
+import pickle
 import os
 
 from functions import *
@@ -37,6 +38,8 @@ def main():
     }
 
     dump( nb_dict, '02-model/02-saved-scores/04-nb_dict_tmp.joblib')
+    with open( '02-model/02-saved-scores/04-nb_dict_tmp.pkl', 'wb') as f:
+        pickle.dump( nb_dict, f)
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_nb = make_pipeline( column_transformer, PowerTransformer(), GaussianNB())

@@ -13,6 +13,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve
 from joblib import dump, load
+import pickle
 import os
 
 from functions import *
@@ -48,6 +49,8 @@ def main():
     except:
         os.makedirs( os.path.dirname( '02-model/02-saved-scores/'))
         dump( knn_dict, '02-model/02-saved-scores/01-knn_dict.joblib')
+    with open( '02-model/02-saved-scores/01-knn_dict.pkl', 'wb') as f:
+        pickle.dump( knn_dict, f)
 
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):

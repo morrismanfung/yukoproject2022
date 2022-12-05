@@ -14,6 +14,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import RFE
 from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve
 from joblib import dump, load
+import pickle
 import os
 
 from functions import *
@@ -26,20 +27,24 @@ def main():
 
     pipe_lsvc_opt = load( '02-model/01-saved-model/06-pipe_lsvc_opt.joblib')
 
-    lsvc_dict = load( '02-model/02-saved-scores/06-lsvc_dict_tmp.joblib')
+    with open( '02-model/02-saved-scores/06-lsvc_dict_tmp.pkl', 'rb') as f:
+        lsvc_dict = pickle.load( f)
 
-    lsvc_dict[ 'test_scores'] = model_testing( pipe_lsvc_opt, X_train, y_train, X_test, y_test)
+    thld = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'LinearSVC'])
+    lsvc_dict[ 'test_scores'] = model_testing( pipe_lsvc_opt, X_train, y_train, X_test, y_test, thld)
 
     dump( lsvc_dict, '02-model/02-saved-scores/06-lsvc_dict.joblib')
+    with open( '02-model/02-saved-scores/06-lsvc_dict.pkl', 'wb') as f:
+        pickle.dump( lsvc_dict, f)
 
 def lsvc_by_proba( pipe_lsvc, X_test, threshold):
     proba = pipe_lsvc.decision_function( X_test)
     y_hat = proba > threshold
     return y_hat
 
-def model_testing( pipe_lsvc_opt, X_train, y_train, X_test, y_test):
+def model_testing( pipe_lsvc_opt, X_train, y_train, X_test, y_test, thld):
     pipe_lsvc_opt.fit( X_train, y_train)
-    y_hat_lsvc_opt = lsvc_by_proba( pipe_lsvc_opt, X_test, -0.0113)
+    y_hat_lsvc_opt = lsvc_by_proba( pipe_lsvc_opt, X_test, thld)
     confusion_matrix_ = better_confusion_matrix( y_test, y_hat_lsvc_opt, labels = [ True, False])
     confusion_matrix_.to_csv( '02-model/02-saved-scores/06-lsvc_confusion_matrix.csv')
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_lsvc_opt, output_dict = True))
