@@ -41,6 +41,8 @@ def main():
     dump( logreg_dict, '02-model/02-saved-scores/05-logreg_dict_tmp.joblib')
     with open( '02-model/02-saved-scores/05-logreg_dict_tmp.pkl', 'wb') as f:
         pickle.dump( logreg_dict, f)
+    
+    threshold_tuning( pipe_logreg_opt, X_train, y_train)
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_logreg = make_pipeline( column_transformer, LogisticRegression( penalty = 'elasticnet', l1_ratio = 0, max_iter = 2000, tol = 0.01, solver = 'saga', random_state = 918))
@@ -77,7 +79,7 @@ def threshold_tuning( pipe_logreg_opt, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
     pr_curve_img = pr_curve( pipe_logreg_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
-    save_chart( pr_curve_img, '02-model/02-saved-scores/05-logreg-pr-purve.png')
+    pr_curve_img.get_figure().savefig( '02-saved-scores/05-logreg-pr-curve.png')
 
 if __name__ == '__main__':
     main()

@@ -41,6 +41,8 @@ def main():
     dump( lsvc_dict, '02-model/02-saved-scores/06-lsvc_dict_tmp.joblib')
     with open( '02-model/02-saved-scores/06-lsvc_dict_tmp.pkl', 'wb') as f:
         pickle.dump( lsvc_dict, f)
+    
+    threshold_tuning( pipe_lsvc_opt, X_train, y_train)
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_lsvc = make_pipeline( column_transformer, LinearSVC( dual = False, random_state = 918))
@@ -72,7 +74,7 @@ def threshold_tuning( pipe_lsvc_opt, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
     pr_curve_img = pr_curve( pipe_lsvc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
-    save_chart( pr_curve_img, '02-model/02-saved-scores/06-lsvc-pr-purve.png')
+    pr_curve_img.get_figure().savefig( '02-saved-scores/06-lsvc-pr-curve.png')
 
 if __name__ == '__main__':
     main()

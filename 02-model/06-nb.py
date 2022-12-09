@@ -40,17 +40,19 @@ def main():
     dump( nb_dict, '02-model/02-saved-scores/04-nb_dict_tmp.joblib')
     with open( '02-model/02-saved-scores/04-nb_dict_tmp.pkl', 'wb') as f:
         pickle.dump( nb_dict, f)
+    
+    threshold_tuning( pipe_nb, X_train, y_train)
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_nb = make_pipeline( column_transformer, PowerTransformer(), GaussianNB())
     cv_result_nb = cross_validate( pipe_nb, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
     return pipe_nb, cv_result_nb
 
-def threshold_tuning( pipe_rfc_opt, X_train, y_train):
+def threshold_tuning( pipe_nb, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
-    pr_curve_img = pr_curve( pipe_rfc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
-    save_chart( pr_curve_img, '02-model/02-saved-scores/04-nb-pr-purve.png')
+    pr_curve_img = pr_curve( pipe_nb, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
+    pr_curve_img.get_figure().savefig( '02-model/02-saved-scores/04-nb-pr-curve.png')
 
 if __name__ == '__main__':
     main()
