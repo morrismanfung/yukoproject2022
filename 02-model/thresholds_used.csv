@@ -1,0 +1,6 @@
+,threshold
+SVC,0.4
+RFC,0.58
+NB,0.9999
+LogReg,0.38
+LinearSVC,-0.0113
