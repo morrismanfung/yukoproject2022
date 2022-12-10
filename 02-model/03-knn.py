@@ -26,7 +26,7 @@ def main():
     cv_scoring_metrics = [ 'precision', 'recall', 'f1']
 
     column_transformer = load( '02-model/column_transformer.joblib')
-    pipe_knn, cv_result_knn = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
+    pipe_knn = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_knn, X_train, y_train)
     pipe_knn_opt, cv_result_knn_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     try:
@@ -38,7 +38,6 @@ def main():
     test_scores = model_testing( pipe_knn_opt, X_train, y_train, X_test, y_test)
 
     knn_dict = {
-        'cv': cv_result_knn,
         'best_params': best_params,
         'cv_opt': cv_result_knn_opt,
         'test_scores': test_scores
@@ -55,8 +54,7 @@ def main():
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_knn = make_pipeline( column_transformer, KNeighborsClassifier())
-    cv_result_knn = cross_validate( pipe_knn, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_knn, cv_result_knn
+    return pipe_knn
 
 def hyperparameter_optimization( pipe_knn, X_train, y_train):
     param_grid = {
