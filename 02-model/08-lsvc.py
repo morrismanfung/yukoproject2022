@@ -27,13 +27,12 @@ def main():
     cv_scoring_metrics = [ 'precision', 'recall', 'f1']
 
     column_transformer = load( '02-model/column_transformer.joblib')
-    pipe_lsvc, cv_result_lsvc = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
+    pipe_lsvc = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_lsvc, X_train, y_train)
     pipe_lsvc_opt, cv_result_lsvc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     dump( pipe_lsvc_opt, '02-model/01-saved-model/06-pipe_lsvc_opt.joblib')
 
     lsvc_dict = {
-        'cv': cv_result_lsvc,
         'best_params': best_params,
         'cv_opt': cv_result_lsvc_opt
     }
@@ -46,8 +45,7 @@ def main():
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_lsvc = make_pipeline( column_transformer, LinearSVC( dual = False, random_state = 918))
-    cv_result_lsvc = cross_validate( pipe_lsvc, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_lsvc, cv_result_lsvc
+    return pipe_lsvc
 
 def hyperparameter_optimization( pipe_lsvc, X_train, y_train):
     param_dist = {

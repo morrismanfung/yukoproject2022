@@ -32,7 +32,6 @@ def main():
     dump( pipe_nb, '02-model/01-saved-model/04-pipe_nb.joblib')
 
     nb_dict = {
-        'cv': cv_result_nb,
         'best_params': 'None',
         'cv_opt': cv_result_nb
     }

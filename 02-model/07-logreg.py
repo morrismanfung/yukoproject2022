@@ -27,13 +27,12 @@ def main():
     cv_scoring_metrics = [ 'precision', 'recall', 'f1']
 
     column_transformer = load( '02-model/column_transformer.joblib')
-    pipe_logreg, cv_result_logreg = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
+    pipe_logreg = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_logreg, X_train, y_train)
     pipe_logreg_opt, cv_result_logreg_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     dump( pipe_logreg_opt, '02-model/01-saved-model/05-pipe_logreg_opt.joblib')
 
     logreg_dict = {
-        'cv': cv_result_logreg,
         'best_params': best_params,
         'cv_opt': cv_result_logreg_opt
     }
@@ -46,8 +45,7 @@ def main():
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_logreg = make_pipeline( column_transformer, LogisticRegression( penalty = 'elasticnet', l1_ratio = 0, max_iter = 2000, tol = 0.01, solver = 'saga', random_state = 918))
-    cv_result_logreg = cross_validate( pipe_logreg, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_logreg, cv_result_logreg
+    return pipe_logreg
 
 def hyperparameter_optimization( pipe_logreg, X_train, y_train):
     param_dist = {
