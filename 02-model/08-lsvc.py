@@ -62,7 +62,7 @@ class LinearSVC_thld( LinearSVC):
         return predictions
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
-    pipe_lsvc = make_pipeline( column_transformer, LinearSVC_thld( dual = False, random_state = 918))
+    pipe_lsvc = make_pipeline( column_transformer, LinearSVC_thld( random_state = 918))
     return pipe_lsvc
 
 def hyperparameter_optimization( pipe_lsvc, X_train, y_train):
