@@ -27,13 +27,12 @@ def main():
     cv_scoring_metrics = [ 'precision', 'recall', 'f1']
 
     column_transformer = load( '02-model/column_transformer.joblib')
-    pipe_rfc, cv_result_rfc = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
+    pipe_rfc = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_rfc, X_train, y_train)
     pipe_rfc_opt, cv_result_rfc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     dump( pipe_rfc_opt, '02-model/01-saved-model/03-pipe_rfc_opt.joblib')
 
     rfc_dict = {
-        'cv': cv_result_rfc,
         'best_params': best_params,
         'cv_opt': cv_result_rfc_opt
     }
@@ -46,8 +45,7 @@ def main():
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_rfc = make_pipeline( column_transformer, RandomForestClassifier( random_state = 918))
-    cv_result_rfc = cross_validate( pipe_rfc, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_rfc, cv_result_rfc
+    return pipe_rfc
 
 def hyperparameter_optimization( pipe_rfc, X_train, y_train):
     param_dist = {
