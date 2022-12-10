@@ -29,12 +29,13 @@ def main():
     column_transformer = load( '02-model/column_transformer.joblib')
     pipe_logreg = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_logreg, X_train, y_train)
-    pipe_logreg_opt, cv_result_logreg_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
+    # pipe_logreg_opt, cv_result_logreg_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
+    pipe_logreg_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     dump( pipe_logreg_opt, '02-model/01-saved-model/05-pipe_logreg_opt.joblib')
 
     logreg_dict = {
-        'best_params': best_params,
-        'cv_opt': cv_result_logreg_opt
+        'best_params': best_params #,
+        # 'cv_opt': cv_result_logreg_opt
     }
 
     dump( logreg_dict, '02-model/02-saved-scores/05-logreg_dict_tmp.joblib')
@@ -43,14 +44,35 @@ def main():
     
     threshold_tuning( pipe_logreg_opt, X_train, y_train)
 
+class LogReg_thld( LogisticRegression):
+    def __init__( self, l1_ratio = 0, C = 1.0, random_state = None, threshold = None):
+        super().__init__(
+            penalty = 'elasticnet',
+            max_iter = 2000,
+            tol = 0.001,
+            solver= 'saga',
+            C = C,
+            l1_ratio = l1_ratio,
+            random_state = random_state
+        )
+        self.threshold = threshold
+
+    def predict( self, X):
+        if self.threshold == None:
+            predictions = super( LogReg_thld, self).predict( X)
+        else:
+            result = super( LogReg_thld, self).predict_proba( X)[ :, 1]
+            predictions = np.array( [ True if result >= X.threshold else False])
+        return predictions
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
-    pipe_logreg = make_pipeline( column_transformer, LogisticRegression( penalty = 'elasticnet', l1_ratio = 0, max_iter = 2000, tol = 0.01, solver = 'saga', random_state = 918))
+    pipe_logreg = make_pipeline( column_transformer, LogReg_thld( random_state = 918))
     return pipe_logreg
 
 def hyperparameter_optimization( pipe_logreg, X_train, y_train):
     param_dist = {
-        'logisticregression__C': [ 10**x for x in range( -2, 5)],
-        'logisticregression__l1_ratio': [ 0, 0.25, 0.5, 0.75, 1]
+        'logreg_thld__C': [ 10**x for x in range( -2, 2)],
+        'logreg_thld__l1_ratio': [ 0, 0.25, 0.5, 0.75, 1]
     }
 
     grid_search_logreg = RandomizedSearchCV(
@@ -62,22 +84,19 @@ def hyperparameter_optimization( pipe_logreg, X_train, y_train):
 
 def optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics):
     pipe_logreg_opt = make_pipeline( column_transformer,
-                                    LogisticRegression( penalty = 'elasticnet', 
-                                                        max_iter = 2000,
-                                                        tol = 0.01,
-                                                        solver = 'saga',
-                                                        C = best_params[ 'logisticregression__C'],
-                                                        l1_ratio = best_params[ 'logisticregression__l1_ratio'],
-                                                        random_state = 918))
+                                    LogReg_thld( C = best_params[ 'logreg_thld__C'],
+                                                 l1_ratio = best_params[ 'logreg_thld__l1_ratio'],
+                                                 random_state = 918))
 
-    cv_result_logreg_opt = cross_validate( pipe_logreg_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_logreg_opt, cv_result_logreg_opt
+    # cv_result_logreg_opt = cross_validate( pipe_logreg_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
+    return pipe_logreg_opt #, cv_result_logreg_opt
 
 def threshold_tuning( pipe_logreg_opt, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
-    pr_curve_img = pr_curve( pipe_logreg_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
-    pr_curve_img.get_figure().savefig( '02-saved-scores/05-logreg-pr-curve.png')
+    pr_curve_df, pr_curve_img = pr_curve( pipe_logreg_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
+    pr_curve_df.to_csv( '02-model/02-saved-scores/05-logreg-thresholds.csv')
+    pr_curve_img.get_figure().savefig( '02-model/02-saved-scores/05-logreg-pr-curve.png')
 
 if __name__ == '__main__':
     main()

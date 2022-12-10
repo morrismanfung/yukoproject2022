@@ -57,7 +57,7 @@ class SVC_thld( SVC):
         if self.threshold == None:
             predictions = super( SVC_thld, self).predict( X)
         else:
-            result = super( SVC_thld, self).predict_proba( X)
+            result = super( SVC_thld, self).decision_function( X)
             predictions = np.array( [ True if result >= X.threshold else False])
         return predictions
 

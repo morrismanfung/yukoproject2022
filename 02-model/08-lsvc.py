@@ -29,12 +29,13 @@ def main():
     column_transformer = load( '02-model/column_transformer.joblib')
     pipe_lsvc = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_lsvc, X_train, y_train)
-    pipe_lsvc_opt, cv_result_lsvc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
+    # pipe_lsvc_opt, cv_result_lsvc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
+    pipe_lsvc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     dump( pipe_lsvc_opt, '02-model/01-saved-model/06-pipe_lsvc_opt.joblib')
 
     lsvc_dict = {
-        'best_params': best_params,
-        'cv_opt': cv_result_lsvc_opt
+        'best_params': best_params #,
+        # 'cv_opt': cv_result_lsvc_opt
     }
 
     dump( lsvc_dict, '02-model/02-saved-scores/06-lsvc_dict_tmp.joblib')
@@ -43,13 +44,30 @@ def main():
     
     threshold_tuning( pipe_lsvc_opt, X_train, y_train)
 
+class LinearSVC_thld( LinearSVC):
+    def __init__( self, C = 1.0, random_state = None, threshold = None):
+        super().__init__(
+            dual = False,
+            C = C,
+            random_state = random_state
+        )
+        self.threshold = threshold
+
+    def predict( self, X):
+        if self.threshold == None:
+            predictions = super( LinearSVC_thld, self).predict( X)
+        else:
+            result = super( LinearSVC_thld, self).decision_function( X)
+            predictions = np.array( [ True if result >= X.threshold else False])
+        return predictions
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
-    pipe_lsvc = make_pipeline( column_transformer, LinearSVC( dual = False, random_state = 918))
+    pipe_lsvc = make_pipeline( column_transformer, LinearSVC_thld( dual = False, random_state = 918))
     return pipe_lsvc
 
 def hyperparameter_optimization( pipe_lsvc, X_train, y_train):
     param_dist = {
-        'linearsvc__C': [ 10**x for x in range( -2, 5)]
+        'linearsvc_thld__C': [ 10**x for x in range( -2, 5)]
     }
 
     grid_search_lsvc = GridSearchCV(
@@ -61,18 +79,18 @@ def hyperparameter_optimization( pipe_lsvc, X_train, y_train):
 
 def optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics):
     pipe_lsvc_opt = make_pipeline( column_transformer,
-                                    LinearSVC( dual = False,
-                                                C = best_params[ 'linearsvc__C'],
-                                                random_state = 918))
+                                    LinearSVC_thld( C = best_params[ 'linearsvc_thld__C'],
+                                                    random_state = 918))
 
-    cv_result_lsvc_opt = cross_validate( pipe_lsvc_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_lsvc_opt, cv_result_lsvc_opt
+    # cv_result_lsvc_opt = cross_validate( pipe_lsvc_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
+    return pipe_lsvc_opt #, cv_result_lsvc_opt
 
 def threshold_tuning( pipe_lsvc_opt, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
-    pr_curve_img = pr_curve( pipe_lsvc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
-    pr_curve_img.get_figure().savefig( '02-saved-scores/06-lsvc-pr-curve.png')
+    pr_curve_df, pr_curve_img = pr_curve( pipe_lsvc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
+    pr_curve_df.to_csv( '02-model/02-saved-scores/06-lsvc-thresholds.csv')
+    pr_curve_img.get_figure().savefig( '02-model/02-saved-scores/06-lsvc-pr-curve.png')
 
 if __name__ == '__main__':
     main()

@@ -6,13 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score, cross_validate, train_test_split, GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import Pipeline, make_pipeline
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_selection import RFE
-from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve
 from joblib import dump, load
 import pickle
 import os
@@ -29,12 +23,13 @@ def main():
     column_transformer = load( '02-model/column_transformer.joblib')
     pipe_rfc = basic_model( column_transformer, X_train, y_train, cv_scoring_metrics)
     best_params = hyperparameter_optimization( pipe_rfc, X_train, y_train)
-    pipe_rfc_opt, cv_result_rfc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
+    # pipe_rfc_opt, cv_result_rfc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
+    pipe_rfc_opt = optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics)
     dump( pipe_rfc_opt, '02-model/01-saved-model/03-pipe_rfc_opt.joblib')
 
     rfc_dict = {
-        'best_params': best_params,
-        'cv_opt': cv_result_rfc_opt
+        'best_params': best_params #,
+        # 'cv_opt': cv_result_rfc_opt
     }
 
     dump( rfc_dict, '02-model/02-saved-scores/03-rfc_dict_tmp.joblib')
@@ -43,17 +38,38 @@ def main():
     
     threshold_tuning( pipe_rfc_opt, X_train, y_train)
 
+class RFC_thld( RandomForestClassifier):
+    def __init__( self, n_estimators = 100, max_depth = None, max_features = 'sqrt', criterion = 'gini',
+        bootstrap = True, random_state = None, threshold = None):
+        super().__init__( 
+            n_estimators = n_estimators,
+            max_depth = max_depth,
+            max_features = max_features,
+            criterion = criterion,
+            bootstrap = bootstrap,
+            random_state = random_state
+        )
+        self.threshold = threshold
+
+    def predict( self, X):
+        if self.threshold == None:
+            predictions = super( RFC_thld, self).predict( X)
+        else:
+            result = super( RFC_thld, self).predict_proba( X)[ :, 1]
+            predictions = np.array( [ True if result >= X.threshold else False])
+        return predictions
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
-    pipe_rfc = make_pipeline( column_transformer, RandomForestClassifier( random_state = 918))
+    pipe_rfc = make_pipeline( column_transformer, RFC_thld( random_state = 918))
     return pipe_rfc
 
 def hyperparameter_optimization( pipe_rfc, X_train, y_train):
     param_dist = {
-        'randomforestclassifier__n_estimators': [ 100*x for x in range( 1, 11)],
-        'randomforestclassifier__max_depth': [ 10*x for x in range( 1, 11)],
-        'randomforestclassifier__max_features': [ 'sqrt', 'log2'],
-        'randomforestclassifier__criterion': [ 'gini', 'entropy', 'log_loss'],
-        'randomforestclassifier__bootstrap': [ True, False]
+        'rfc_thld__n_estimators': [ 100*x for x in range( 1, 11)],
+        'rfc_thld__max_depth': [ 10*x for x in range( 1, 11)],
+        'rfc_thld__max_features': [ 'sqrt', 'log2'],
+        'rfc_thld__criterion': [ 'gini', 'entropy', 'log_loss'],
+        'rfc_thld__bootstrap': [ True, False]
     }
 
     random_search_rfc = RandomizedSearchCV(
@@ -65,20 +81,21 @@ def hyperparameter_optimization( pipe_rfc, X_train, y_train):
 
 def optimized_model( column_transformer, X_train, y_train, best_params, cv_scoring_metrics):
     pipe_rfc_opt = make_pipeline( column_transformer,
-                              RandomForestClassifier( n_estimators = best_params[ 'randomforestclassifier__n_estimators'],
-                                                      max_features = best_params[ 'randomforestclassifier__max_features'],
-                                                      max_depth = best_params[ 'randomforestclassifier__max_depth'],
-                                                      criterion = best_params[ 'randomforestclassifier__criterion'],
-                                                      bootstrap = best_params[ 'randomforestclassifier__bootstrap']))
+                              RFC_thld( n_estimators = best_params[ 'rfc_thld__n_estimators'],
+                                        max_features = best_params[ 'rfc_thld__max_features'],
+                                        max_depth = best_params[ 'rfc_thld__max_depth'],
+                                        criterion = best_params[ 'rfc_thld__criterion'],
+                                        bootstrap = best_params[ 'rfc_thld__bootstrap']))
 
-    cv_result_rfc_opt = cross_validate( pipe_rfc_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
-    return pipe_rfc_opt, cv_result_rfc_opt
+    # cv_result_rfc_opt = cross_validate( pipe_rfc_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
+    return pipe_rfc_opt #, cv_result_rfc_opt
 
 def threshold_tuning( pipe_rfc_opt, X_train, y_train):
     X_cv_train, X_cv_test, y_cv_train, y_cv_test = train_test_split(
         X_train, y_train, test_size = 0.2, stratify = y_train, random_state = 918)
-    pr_curve_img = pr_curve( pipe_rfc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
-    pr_curve_img.get_figure().savefig( '02-saved-scores/03-rfc-pr-curve.png')
+    pr_curve_df, pr_curve_img = pr_curve( pipe_rfc_opt, X_cv_train, X_cv_test, y_cv_train, y_cv_test)
+    pr_curve_df.to_csv( '02-model/02-saved-scores/03-rfc-thresholds.csv')
+    pr_curve_img.get_figure().savefig( '02-model/02-saved-scores/03-rfc-pr-curve.png')
 
 if __name__ == '__main__':
     main()

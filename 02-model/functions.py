@@ -61,7 +61,7 @@ def pr_curve( model, X_train, X_test, y_train, y_test):
         x = 'precision',
         y = 'recall'
     )
-    return chart
+    return plot_df, chart
 
 def log_func(x):
     return np.log(x+1)
