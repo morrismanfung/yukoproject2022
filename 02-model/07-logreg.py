@@ -18,6 +18,7 @@ import pickle
 import os
 
 from functions import *
+from classes import LogReg_thld
 
 def main():
     df_train = pd.read_csv( '01-data/train.csv')
@@ -43,27 +44,6 @@ def main():
         pickle.dump( logreg_dict, f)
     
     threshold_tuning( pipe_logreg_opt, X_train, y_train)
-
-class LogReg_thld( LogisticRegression):
-    def __init__( self, l1_ratio = 0, C = 1.0, random_state = None, threshold = None):
-        super().__init__(
-            penalty = 'elasticnet',
-            max_iter = 2000,
-            tol = 0.001,
-            solver= 'saga',
-            C = C,
-            l1_ratio = l1_ratio,
-            random_state = random_state
-        )
-        self.threshold = threshold
-
-    def predict( self, X):
-        if self.threshold == None:
-            predictions = super( LogReg_thld, self).predict( X)
-        else:
-            result = super( LogReg_thld, self).predict_proba( X)[ :, 1]
-            predictions = np.array( [ True if result >= X.threshold else False])
-        return predictions
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_logreg = make_pipeline( column_transformer, LogReg_thld( random_state = 918))

@@ -13,6 +13,7 @@ import pickle
 import os
 
 from functions import *
+from classes import NB_thld
 
 def main():
     df_train = pd.read_csv( '01-data/train.csv')
@@ -36,19 +37,6 @@ def main():
         pickle.dump( nb_dict, f)
     
     threshold_tuning( pipe_nb, X_train, y_train)
-
-class NB_thld( GaussianNB):
-    def __init__( self, threshold = None):
-        super().__init__()
-        self.threshold = threshold
-
-    def predict( self, X):
-        if self.threshold == None:
-            predictions = super( NB_thld, self).predict( X)
-        else:
-            result = super( NB_thld, self).predict_proba( X)[ :, 1]
-            predictions = np.array( [ True if result >= X.threshold else False])
-        return predictions
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_nb = make_pipeline( column_transformer, PowerTransformer(), NB_thld())

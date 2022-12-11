@@ -12,6 +12,7 @@ import pickle
 import os
 
 from functions import *
+from classes import RFC_thld
 
 def main():
     df_train = pd.read_csv( '01-data/train.csv')
@@ -37,27 +38,6 @@ def main():
         pickle.dump( rfc_dict, f)
     
     threshold_tuning( pipe_rfc_opt, X_train, y_train)
-
-class RFC_thld( RandomForestClassifier):
-    def __init__( self, n_estimators = 100, max_depth = None, max_features = 'sqrt', criterion = 'gini',
-        bootstrap = True, random_state = None, threshold = None):
-        super().__init__( 
-            n_estimators = n_estimators,
-            max_depth = max_depth,
-            max_features = max_features,
-            criterion = criterion,
-            bootstrap = bootstrap,
-            random_state = random_state
-        )
-        self.threshold = threshold
-
-    def predict( self, X):
-        if self.threshold == None:
-            predictions = super( RFC_thld, self).predict( X)
-        else:
-            result = super( RFC_thld, self).predict_proba( X)[ :, 1]
-            predictions = np.array( [ True if result >= X.threshold else False])
-        return predictions
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_rfc = make_pipeline( column_transformer, RFC_thld( random_state = 918))

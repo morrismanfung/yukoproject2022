@@ -1,6 +1,9 @@
-,threshold
-SVC,0.4
-RFC,0.58
-NB,0.9999
-LogReg,0.38
-LinearSVC,-0.0113
+index,threshold
+SVC,0.4183
+RFC_rec,0.066659
+RFC_pre,0.3606
+NB,0.999998724
+LogReg_rec,0.074042
+LogReg_pre,0.45
+LinearSVC_rec,-0.00779
+LinearSVC_pre,-0.8

@@ -18,6 +18,7 @@ import pickle
 import os
 
 from functions import *
+from classes import *
 
 def main():
     df_train = pd.read_csv( '01-data/train.csv')
@@ -43,23 +44,6 @@ def main():
         pickle.dump( svc_dict, f)
     
     threshold_tuning( pipe_svc_opt, X_train, y_train)
-
-class SVC_thld( SVC):
-    def __init__( self, gamma = 'scale', C = 1.0, random_state = None, threshold = None):
-        super().__init__(
-            gamma = gamma,
-            C = C,
-            random_state = random_state
-        )
-        self.threshold = threshold
-
-    def predict( self, X):
-        if self.threshold == None:
-            predictions = super( SVC_thld, self).predict( X)
-        else:
-            result = super( SVC_thld, self).decision_function( X)
-            predictions = np.array( [ True if result >= X.threshold else False])
-        return predictions
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_svc = make_pipeline( column_transformer, SVC_thld( random_state = 918))
