@@ -65,7 +65,8 @@ def optimized_model( column_transformer, X_train, y_train, best_params, cv_scori
                                         max_features = best_params[ 'rfc_thld__max_features'],
                                         max_depth = best_params[ 'rfc_thld__max_depth'],
                                         criterion = best_params[ 'rfc_thld__criterion'],
-                                        bootstrap = best_params[ 'rfc_thld__bootstrap']))
+                                        bootstrap = best_params[ 'rfc_thld__bootstrap'],
+                                        random_state = 918))
 
     # cv_result_rfc_opt = cross_validate( pipe_rfc_opt, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)
     return pipe_rfc_opt #, cv_result_rfc_opt
