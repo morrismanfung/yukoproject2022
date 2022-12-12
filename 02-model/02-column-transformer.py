@@ -64,6 +64,12 @@ def column_transformer_post_selection( X_train_transformed, y_train, cols):
     rfecv.fit( X_train_transformed, y_train)
     print( len( rfecv.feature_names_in_[ rfecv.support_]))
     print( rfecv.feature_names_in_[ rfecv.support_])
+    features_df = pd.DataFrame(
+        {
+            'feature': rfecv.feature_names_in_[ rfecv.support_]
+        }
+    )
+    features_df.to_csv( '02-model/features_selected.csv')
     cols_std = if_in( cols[ 'cols_std'], rfecv.feature_names_in_[ rfecv.support_])
     cols_log_std = if_in( cols[ 'cols_log_std'], rfecv.feature_names_in_[ rfecv.support_])
     cols_passthrough = if_in( cols[ 'cols_passthrough'], rfecv.feature_names_in_[ rfecv.support_])
