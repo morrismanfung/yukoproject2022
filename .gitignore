@@ -1,2 +1,4 @@
 01-data/horse-race-history/*.csv
 *.ipynb_checkpoints
+*geckodriver.log
+*__pycache__*
