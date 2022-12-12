@@ -25,6 +25,8 @@ def main():
     df_test = pd.read_csv( '01-data/test.csv')
     X_train, y_train = df_train.drop( 'Winner', axis = 1), df_train[ 'Winner']
     X_test, y_test = df_test.drop( 'Winner', axis = 1), df_test[ 'Winner']
+    cv_scoring_metrics = [ 'precision', 'recall', 'f1']
+
     column_transformer = load( '02-model/column_transformer.joblib')
 
     with open( '02-model/02-saved-scores/02-svc_dict_tmp.pkl', 'rb') as f:
@@ -34,6 +36,7 @@ def main():
     thld = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'SVC'])
 
     pipe_svc_opt = final_svc( column_transformer, best_params, thld)
+    svc_dict[ 'cv_scores'] = cross_validate( pipe_svc_opt, X_train, y_train, cv = 5, scoring = cv_scoring_metrics, return_train_score = True)
     svc_dict[ 'test_scores'] = model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test, thld)
 
     dump( svc_dict, '02-model/02-saved-scores/02-svc_dict.joblib')
