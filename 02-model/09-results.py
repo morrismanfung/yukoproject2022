@@ -38,14 +38,13 @@ def read_results():
 
 def cv_results( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict):
     cv_dict = {}
-    #cv_dict[ 'KNN'] = pd.DataFrame( knn_dict[ 'cv']).T.agg( [ 'mean', 'std'], axis = 1)
-    #cv_dict[ 'KNN_opt'] = pd.DataFrame( knn_dict[ 'cv_opt']).T.agg( [ 'mean', 'std'], axis = 1)
+    cv_dict[ 'KNN'] = pd.DataFrame( knn_dict[ 'cv_scores']).T.agg( [ 'mean'], axis = 1)
     cv_dict[ 'SVC'] = pd.DataFrame( svc_dict[ 'cv_scores']).T.agg( [ 'mean'], axis = 1)
     cv_dict[ 'RFC'] = pd.DataFrame( rfc_dict[ 'cv_scores']).T.agg( [ 'mean'], axis = 1)
     cv_dict[ 'NB'] = pd.DataFrame( nb_dict[ 'cv_scores']).T.agg( [ 'mean'], axis = 1)
     cv_dict[ 'LogReg'] = pd.DataFrame( logreg_dict[ 'cv_scores']).T.agg( [ 'mean'], axis = 1)
     cv_dict[ 'LinearSVC'] = pd.DataFrame( lsvc_dict[ 'cv_scores']).T.agg( [ 'mean'], axis = 1)
-    cv_df = pd.concat( cv_dict, axis = 1).round( 4)
+    cv_df = pd.concat( cv_dict, axis = 1).round( 2)
     return cv_df
 
 def print_best_parameters( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict):
@@ -66,7 +65,7 @@ def test_scores( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict):
         'NB': pd.Series( nb_dict[ 'test_scores']),
         'LogReg': pd.Series( logreg_dict[ 'test_scores']),
         'LinearSVC': pd.Series( lsvc_dict[ 'test_scores'])
-    }).round( 4)
+    }).round( 2)
     return test_scores_df
 
 if __name__ == '__main__':

@@ -39,7 +39,7 @@ def main():
 
     knn_dict = {
         'best_params': best_params,
-        'cv_opt': cv_result_knn_opt,
+        'cv_scores': cv_result_knn_opt,
         'test_scores': test_scores
     }
 
