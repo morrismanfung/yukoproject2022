@@ -2,7 +2,6 @@
 
 ![header](06-img/header-README.jpg)
 
-
 The ゆうこ Project aims to generate long term positive return with horse betting with the Hong Kong Jockey Club (HKJC). We use web-scraping and a variety of machine learning methods to predict horse racing results.
 
 ## Methodology
@@ -11,7 +10,7 @@ The ゆうこ Project aims to generate long term positive return with horse bett
 
 It should be noted that there is always a trade-off between precision and recall in most classification problems. In this project, we place much more significance on precision than on recall. With high recall but low precision, we may be able to have more winning bets but each loss will cost much money. Based on our tests, payoffs by setting a high recall rate usually do not offset the losses due to the low precision. With high precision and low recall, we can have more confidence on each bet while having the disadvantage of missing many possible winners. Yet, it can be compensated by increasing the bet size.
 
-In the current project, we only focus on betting on Win, in which we will get a payoff only when the selected horse finishes 1st. We decided not to bet on Show, in which we would get a payoff when the selected horse finishes 1st, 2nd, or 3rd in a race. The reason is that the model does not yield greater precision when predicting Show rate. Only the recall rate was improved when we tried to predict Show rate instead of Win rate. As we value precision more and that Show usually comes with lower odds, we focus on Win instead of Show.
+For simplicity, in the current project, we only focus on betting on Win, in which we will get a payoff only when the selected horse finishes 1st.
 
 There are also more complicated betting options such as Quinella Place and Triple Trio. However, due to the lack of precision of the model, we will not study these betting options but only stick to Win.
 
@@ -23,37 +22,44 @@ With each horse in a race as a single sample to be analyzed (i.e., there are aro
 
 Web scraping is done with packages selenium, BeautifulSoup, and pandas. Scripts for fetching and for extracting were written separately. Data will be mainly from two types of pages, Information and Racing results. Information includes information of horses, jockeys, and trainers. To get an exhaustive list of horses, hyperlinks are obtained from [https://racing.hkjc.com/racing/information/chinese/Horse/SelectHorsebyChar.aspx?ordertype=2](https://racing.hkjc.com/racing/information/chinese/Horse/SelectHorsebyChar.aspx?ordertype=2). While we obtained historical data of races in the previous 3 seasons, some of the horses are already retired and are not shown in the above page. We manually search the horse name and copy the pages for those retired horses for further data extraction.
 
-### Data Preprocessing & Data Engineering
+### Preprocessing and feature engineering
 
 Independent variables used in the model can be categorized as specific or general. Specific variables such as odds and horse weight are race specific and they can provide crucial information about how a horse will perform on that racing day. General variables such as horse total stake earned and jockey’s winning rate are not easy to be updated. It is difficult to track how age and total stake earned change across time. (I admit that it is do-able and that I am lazy.) Still, this information gives us a general sense of how a horse, a jockey, and a trainer is and can be potentially useful in model development.
 
 Feature engineering was done in order to calculate indicators with temporal significance. These indicators include number of days since the last race (default = 36), place in the previous race (default = 7), mean of place of the last 3 races (default = 7), mean of place of the last 5 races (default = 7), change in declared weight since last race (default = 0), and on-race rating.
 
-We attempted to use subsets of variables. The result shows that the more variables we used, the more accurate the model prediction is. Thus, we use all variables in the final model.
+Variables used include (1) actual weight, (2) declared horse weight, (3) draw, (4) Win odds, (5) jockey’s win rate, (6) jockey’s place rate, (7) jockey’s show rate, (8) trainer’s win rate, (9) trainer’s place rate, (10) trainer’s show rate, (11) total stake the horse has earned, (12) total race the horse has run, (13) horse’s win rate, (14) horse’s place rate, (15) horse’s show rate, (16) horse age, (17) number of days since last race, (18) place in the previous race, (19) average place in the previous 3 races, (20) average place in the previous 5 races, (21) change in horse weight since the last race, (22) rating.
 
-Variables used include (1) actual weight, (2) declared horse weight, (3) draw, (4) Win odds, (5) jockey’s win rate, (6) jockey’s place rate, (7) jockey’s show rate, (8) trainer’s win rate, (9) trainer’s place rate, (10) trainer’s show rate, (11) total stake the horse has earned, (12) total race the horse has run, (13) horse’s win rate, (14) horse’s place rate, (15) horse’s show rate, (16) horse age, (17) number of days since last race, (18) place in the previous race, (19) average place in the previous 3 races, (20) average place in the previous 5 races, (21) chang in horse weight since the last race, (22) rating.
+While the main goal is to predict the winner among horses in the same races, we can levarage the absolute attributes of each horse by computing relative scores by comparing each horse to other entries in the same race. These relative scoeres present how good a horse is, compared to other competitors. In the analysis, all of these variables are with the suffix `_norm`.
 
 Discussion on each individual features can be found in the EDA report [here](https://github.com/morrismanfung/yukoproject2022/blob/main/04-report/EDA.ipynb).
 
-### Machine Learning
+We used recursive feature elimination (RFE) to select only 75% of the orignal features. Final features used include (1) place in the previous race, (2) average place in the previous 3 places, (3)change in horse weight since the last race, (4) Win odds, (5) total race the horse race run, (6) number of days since last race, (7) jokcey's win rate, (8)jockey's place rate, (9) jockey's show rate, (10) trainer's win rate, (11) trainer's show rate, (12) horse's win rate, (13) horse's place rate, (14) horse's show rate, (15) _relative_ actual weight, (16) _relative_ Win odds, (17) _relative_ jockey's win rate, (18) _relative_ jockey's place rate, (19) _relative_ jockey's show rate, (20) _relative_ trainer's win rate, (21) _relative_ trainer's place rate, (22) _relative_ total stake the horse has won, (23) _relative_ number of races the horse has run, (24) _relative_ horse's win rate, (25) _relative_ horse's place rate, (26) _relative_ horse's show rate, (27) _relative_ horse age, (28) _relative_ number of days since last race, (29) _relative_ average place in the previous 3 places, (30) _relative_ average place in the previous 5 places, (31)
+_relative_ change in horse weight since the last race, (32) _relative_ rating.
 
-#### Algorithms
+### Machine Learning Algorithms
 
-We tested multiple machine learning algorithms to find the optimal strategy. We used a KNN classifier, a suppeort vector classifier (SVC), a random forest classifer (SVC), a naive Bayes classifier, and logistic regression.
+We tested multiple machine learning algorithms to find the optimal strategy. We used a KNN classifier, a suppeort vector classifier (SVC), a random forest classifer (RFC), a Gaussian naive Bayes classifier, a logistic regression classifier, and a linear support vector classifer (LinearSVC).
 
-#### Training and Testing
+### Training and Testing
 
-In the current project, we used traditional splitting method with no stratification.
+In the current project, we used stratified splitting.
 
-There will be 2 limitations with this method. First, class imbalance is not considered as the splitting is completely under pseudo-randomization. Secondly, it does not enable us to estimate how the model works in given timeframes. We could not assess the effectiveness of using past racing records in predicting future events, nor exame some risk-related performances such as maximum drawdown and consecutive losses directly.
+A limitation of this method is that it does not enable us to estimate how the model works in given timeframes. We could not assess the effectiveness of using past racing records in predicting future events, nor exame some risk-related performances such as maximum drawdown and consecutive losses directly.
 
 ### Imbalanced data
 
 With each horse in a race as an observation, it is inevitable that the number of winning cases will be much less than the number of losing cases. This issue is not addressed yet in this stage.
 
+Using the argument `class_weight='balanced'` in `scikit-learn` models were considered. However, given that using a balanced `class_weight` always reduces precision and improves recall, it defeats our purpose of maximizing precision.
+
 ### Hyperparameter optimization
 
 Optimization was performed with `scikit-learn`'s `GridSearchCV` and `RandomizedSearchCV` with precision as the objective function to be maximized.
+
+### Threshold tuning
+
+To ensure the models are having sufficient precision, threshold tuning was performed by visually inspecting the precision-recall curve generated by `scikit-learn`'s `precision-recall-curve` function. The manually selected thresholds for each model were included in a [spreadsheet](https://github.com/morrismanfung/yukoproject2022/blob/v1.0.1-threshold/02-model/thresholds_used.csv) which would be read in model testing.
 
 ## Results
 
@@ -61,15 +67,29 @@ Detailed performance of each model is attached [here](https://github.com/morrism
 
 Cross-validation and testing results is showed in the table below.
 
-|       | Cross-validation precision | Testing precision | Testing recall |
-| ----- | -------------------------- | ----------------- | -------------- |
-| KNN | 0.64 | 0.54 | 0.04 |
-| SVC| 0.35 | 0.66 | 0.04 |
-| RFC | 0.63 | 0.64 | 0.09 |
-| Naive Bayes | 0.21 | 0.21 | 0.66 |
-| Logistic Regression | 0.67 | 0.72 | 0.10 |
+|       | mean train precision | mean test precision | mean train recall | mean test recall | mean train f1 | mean test f1|
+| --- | ---- | ---- | ---- | ---- | ---- | ---- |
+| KNN | 0.77 | 0.68 | 0.06 | 0.05 | 0.11 | 0.10 |
+| SVC | 1.00 | 0.43 | 0.84 | 1.00 | 0.91 | 0.17 |
+| RFC | 0.96 | 0.54 | 0.58 | 0.19 | 0.72 | 0.28 |
+| Naive Bayes | 0.48 | 0.47 | 0.18 | 0.17 | 0.26 | 0.25 |
+| Logistic Regression | 0.65 | 0.63 | 0.15 | 0.15 | 0.24 | 0.24 |
+| Linear SVC | 0.71 | 0.72 | 0.11 | 0.11 | 0.20 | 0.19 |
 
-It is determined that logistic regression is the best performing model here.
+**Table 1: Cross-validation results**
+
+|     | precision | recall | f1 |
+| --- | ---- | ---- | ---- |
+| KNN | 0.70 | 0.07 | 0.13 |
+| SVC | 0.45 | 0.12 | 0.19 |
+| RFC | 0.53 | 0.18 | 0.27 |
+| Naive Bayes | 0.44 | 0.17 | 0.25 |
+| Logistic Regression | 0.6 | 0.15 | 0.24 |
+| Linear SVC | 0.67 | 0.10 | 0.18 |
+
+**Table 2: Testing results**
+
+It is determined that RFC, logistic regression and linear svc work the best. In the next stage, we will explore whether a voting machine should be introduced to further improve performance.
 
 ## Discussion
 
@@ -77,14 +97,10 @@ It is determined that logistic regression is the best performing model here.
 
 It should be noted that the current project is highly limited by the data source as the data collection procedure is not robust and with flaws. Any application of the project will also be limited by the obstacles in data collection. To ensure best performance for prediction, one should constantly update their database in order to obtain the most updated data which is changing every week.
 
+One of the most serious problems is the inclusion of features related to winning rates. As these features were collected at the end of the season, they contain much information about how a particular horse, jockey, or trainer performed in the past. For a more robust design, these features should be removed or calculated manually without using the data shown online.
+
 ### Room for Improvment
 
 Many existing limitations not mentioned above can be improved in the future.
 
 Currently the project only focuses on class prediction but ignore a more important factor which is profitability. It should be implemented in the future.
-
-Right now, we are only using the default thresholds for classification. In fact, we should use precision-recall curves to further optimize the models' performance based on our expected precision and recall.
-
-Cross-validation is only based on precision score now. More comprehensive cross-validation can be done by including confusion matrixes so we can also inspect the cross-validation recall.
-
-Class imbalanced should be addressed by both straitified shuffling (in train-test splitting and cross-validation) and class weight in each model.
