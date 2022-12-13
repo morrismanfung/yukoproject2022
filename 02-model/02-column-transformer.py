@@ -37,6 +37,9 @@ def main():
     column_transformer = column_transformer_post_selection( X_train_transformed, y_train, cols)
     dump( column_transformer, '02-model/column_transformer.joblib')
 
+    with open( 'bin/02-column-transformer', 'w') as f:
+        f.close()
+
 def transform_data_pre_selection( X_train, cols):
     log_transformer = FunctionTransformer( log_func)
     pipe_log_std = make_pipeline(

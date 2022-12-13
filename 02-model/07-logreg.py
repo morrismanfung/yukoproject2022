@@ -45,6 +45,9 @@ def main():
     
     threshold_tuning( pipe_logreg_opt, X_train, y_train)
 
+    with open( 'bin/07-logreg', 'w') as f:
+        f.close()
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_logreg = make_pipeline( column_transformer, LogReg_thld( random_state = 918))
     return pipe_logreg

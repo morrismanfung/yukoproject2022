@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import os
 
 from functions import *
 
@@ -26,6 +27,14 @@ def main():
     data_train, data_test = train_test_split( pd.concat( [X, y], axis = 1), test_size = 0.2, stratify = y, random_state = 918)
     data_train.to_csv( '01-data/train.csv', index = False)
     data_test.to_csv( '01-data/test.csv', index = False)
+
+    try:
+        with open( 'bin/01-cleaned-data', 'w') as f:
+            f.close()
+    except:
+        os.makedirs( os.path.dirname( 'bin/'))
+        with open( 'bin/01-cleaned-data', 'w') as f:
+            f.close()
 
 if __name__ == '__main__':
     main()

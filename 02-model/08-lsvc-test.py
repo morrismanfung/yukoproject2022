@@ -42,6 +42,9 @@ def main():
     dump( lsvc_dict, '02-model/02-saved-scores/06-lsvc_dict.joblib')
     with open( '02-model/02-saved-scores/06-lsvc_dict.pkl', 'wb') as f:
         pickle.dump( lsvc_dict, f)
+    
+    with open( 'bin/08-lsvc-test', 'w') as f:
+        f.close()
 
 def final_lsvc( column_transformer, best_params, thld):
     pipe_lsvc_opt = make_pipeline( column_transformer,

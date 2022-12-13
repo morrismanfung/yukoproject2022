@@ -42,6 +42,9 @@ def main():
     dump( rfc_dict, '02-model/02-saved-scores/03-rfc_dict.joblib')
     with open( '02-model/02-saved-scores/03-rfc_dict.pkl', 'wb') as f:
         pickle.dump( rfc_dict, f)
+    
+    with open( 'bin/05-rfc-test', 'w') as f:
+        f.close()
 
 def final_rfc( column_transformer, best_params, thld):
     pipe_rfc_opt = make_pipeline( column_transformer,

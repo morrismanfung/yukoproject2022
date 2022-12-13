@@ -42,6 +42,9 @@ def main():
     dump( logreg_dict, '02-model/02-saved-scores/05-logreg_dict.joblib')
     with open( '02-model/02-saved-scores/05-logreg_dict.pkl', 'wb') as f:
         pickle.dump( logreg_dict, f)
+    
+    with open( 'bin/07-logreg-test', 'w') as f:
+        f.close()
 
 def final_logreg( column_transformer, best_params, thld):
     pipe_logreg_opt = make_pipeline( column_transformer,

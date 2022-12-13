@@ -39,6 +39,9 @@ def main():
     
     threshold_tuning( pipe_rfc_opt, X_train, y_train)
 
+    with open( 'bin/05-rfc', 'w') as f:
+        f.close()
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_rfc = make_pipeline( column_transformer, RFC_thld( random_state = 918))
     return pipe_rfc

@@ -38,6 +38,9 @@ def main():
     
     threshold_tuning( pipe_nb, X_train, y_train)
 
+    with open( 'bin/06-nb', 'w') as f:
+        f.close()
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_nb = make_pipeline( column_transformer, PowerTransformer(), NB_thld())
     # cv_result_nb = cross_validate( pipe_nb, X_train, y_train, cv = 5, return_train_score = True, scoring = cv_scoring_metrics)

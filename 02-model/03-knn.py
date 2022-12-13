@@ -50,6 +50,9 @@ def main():
         dump( knn_dict, '02-model/02-saved-scores/01-knn_dict.joblib')
     with open( '02-model/02-saved-scores/01-knn_dict.pkl', 'wb') as f:
         pickle.dump( knn_dict, f)
+    
+    with open( 'bin/03-knn', 'w') as f:
+        f.close()
 
 
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):

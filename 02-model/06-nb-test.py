@@ -42,6 +42,9 @@ def main():
     dump( nb_dict, '02-model/02-saved-scores/04-nb_dict.joblib')
     with open( '02-model/02-saved-scores/04-nb_dict.pkl', 'wb') as f:
         pickle.dump( nb_dict, f)
+    
+    with open( 'bin/06-nb-test', 'w') as f:
+        f.close()
 
 def final_nb( column_transformer, thld):
     pipe_nb_opt = make_pipeline( column_transformer,

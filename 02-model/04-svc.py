@@ -45,6 +45,9 @@ def main():
     
     threshold_tuning( pipe_svc_opt, X_train, y_train)
 
+    with open( 'bin/04-svc', 'w') as f:
+        f.close()
+
 def basic_model( column_transformer, X_train, y_train, cv_scoring_metrics):
     pipe_svc = make_pipeline( column_transformer, SVC_thld( random_state = 918))
     return pipe_svc
