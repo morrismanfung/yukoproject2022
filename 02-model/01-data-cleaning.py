@@ -7,7 +7,7 @@ import os
 from functions import *
 
 def main():
-    data_full = pd.read_csv( '01-data/data_merged_20220910_norm.csv')
+    data_full = pd.read_csv( '01-data/data-full_20221219_norm.csv')
     data_full = data_full.query('H_Age<100&Draw>0').reset_index( drop = True)
     y = data_full[ 'Winner']
 

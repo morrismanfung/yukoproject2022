@@ -1,9 +1,7 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-data_full = pd.read_csv( '..\\01-data\\data-merged_20220910.csv')
+data_full = pd.read_csv( '01-data/data-full_20221219.csv')
 data_full = data_full[ data_full[ 'H_Age'] < 100] # To filter out any problematic entries.
 # data_full = data_full[ data_full[ 'Place'] < 11]
 # data_full = data_full[ data_full[ 'RaceYear'] > 2020]
@@ -45,4 +43,4 @@ X_norm.columns = list( map( lambda x: '_'.join( [x, 'norm']), X.drop( 'RaceID', 
 
 X_comb = pd.concat( [ data_full, X_norm], axis = 1)
 
-X_comb.to_csv( '..\\01-data\\01-historical\\data-merged_20220910_norm.csv', encoding = 'utf-8_sig')
+X_comb.to_csv( '01-data/data-full_20221219_norm.csv', encoding = 'utf-8_sig')
