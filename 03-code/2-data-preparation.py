@@ -41,6 +41,7 @@ df_horse[ 'H_TotalStake'] = df_horse[ 'H_TotalStake'].str.replace( '$', '').str.
 df_horse[ 'H_Rate_win'] = df_horse[ 'H_1st'] / df_horse[ 'H_Total']
 df_horse[ 'H_Rate_place'] = df_horse[ [ 'H_1st', 'H_2nd']].sum( axis = 1) / df_horse[ 'H_Total']
 df_horse[ 'H_Rate_show'] = df_horse[ [ 'H_1st', 'H_2nd', 'H_3rd']].sum( axis = 1) / df_horse[ 'H_Total']
+df_horse = df_horse.drop( 'H_Trainer', axis = 1)
 
 ## ---------- Jockeys ----------
 df_jockey = df_jockey.iloc[ :, 1:]
