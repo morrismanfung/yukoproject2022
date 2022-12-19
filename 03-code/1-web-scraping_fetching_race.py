@@ -17,7 +17,7 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 html_link = 'https://racing.hkjc.com/racing/information/Chinese/racing/LocalResults.aspx'
 
-Browser = webdriver.Chrome( options = options, executable_path = 'chromedriver_win32\\chromedriver.exe')
+Browser = webdriver.Chrome( options = options, executable_path = 'C:\\Users\\User\\Documents\\VisualStudioCode\\WebScrappingTutorial\\chromedriver_win32_108\\chromedriver.exe')
 Browser.get( html_link)
 time.sleep( 5)
 
@@ -38,27 +38,28 @@ def reformat( dates_i):
 reformated_dates = list( map( reformat, dates))
 
 current_time = datetime.now()
-file_name = 'ReformatedDates' + '0801' +'.csv'
+file_name = 'ReformatedDates' + '1218' +'.csv'
 pd.DataFrame( reformated_dates).to_csv( file_name)
 
 def RaceSingleMatch_html( target_date, target_raceno):
     html_link_RaceSingle = 'https://racing.hkjc.com/racing/information/chinese/Racing/LocalResults.aspx?RaceDate=' + target_date + link_venue + target_raceno
-    Browser_RaceSingle = webdriver.Chrome( options = options, executable_path = 'chromedriver_win32\\chromedriver.exe')
+    Browser_RaceSingle = webdriver.Chrome( options = options, executable_path = 'C:\\Users\\User\\Documents\\VisualStudioCode\\WebScrappingTutorial\\chromedriver_win32_108\\chromedriver.exe')
     Browser_RaceSingle.get( html_link_RaceSingle)
     time.sleep( 3)
     html_text_RaceSingle = Browser_RaceSingle.page_source
     file_name = target_date + '_' + target_raceno + '_html.txt'
     file_name = file_name.replace( '/', '-')
+    file_name = '01-data/03-races_html/' + file_name
     with open( file_name, 'w', encoding = 'utf-8_sig') as file:
         file.write( html_text_RaceSingle)    
     return
     
 # for race_day in reformated_dates[ :6]:
-for race_day in [ '2022/07/01', '2022/07/06', '2022/07/10', '2022/07/13', '2022/07/16']:
+for race_day in reformated_dates:
     date_RaceDay = race_day
     html_link_RaceDay = 'https://racing.hkjc.com/racing/information/chinese/Racing/LocalResults.aspx?RaceDate=' + date_RaceDay
 
-    Browser_RaceDay = webdriver.Chrome( options = options, executable_path = 'chromedriver_win32\\chromedriver.exe')
+    Browser_RaceDay = webdriver.Chrome( options = options, executable_path = 'C:\\Users\\User\\Documents\\VisualStudioCode\\WebScrappingTutorial\\chromedriver_win32_108\\chromedriver.exe')
     Browser_RaceDay.get( html_link_RaceDay)
     time.sleep( 5)
 

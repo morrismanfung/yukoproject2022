@@ -2,12 +2,12 @@ import numpy as np
 import pandas as pd
 
 # ---------- Data importation ----------
-df_race = pd.read_csv( '01-data\\data_Races_raw_RH_2022_0910.csv')
-df_horse_current = pd.read_csv( '01-data\\basic-horse.csv')
-df_horse_retired = pd.read_csv( '01-data\\basic-horse-retired.csv')
+df_race = pd.read_csv( '01-data/basic-race.csv')
+df_horse_current = pd.read_csv( '01-data/basic-horse.csv')
+df_horse_retired = pd.read_csv( '01-data/basic-horse-retired.csv')
 df_horse = pd.concat( [ df_horse_current, df_horse_retired], axis = 0)
-df_jockey = pd.read_csv( '01-data\\basic-jockey.csv')
-df_trainer = pd.read_csv( '01-data\\basic-trainer.csv')
+df_jockey = pd.read_csv( '01-data/basic-jockey.csv')
+df_trainer = pd.read_csv( '01-data/basic-trainer.csv')
 
 ## ---------- Races ----------
 columns_race = [
@@ -94,7 +94,7 @@ for i in range( len( df_merged_jth)):
         HorseName = df_merged_jth.loc[ i, 'HorseName']
         Date = df_merged_jth.loc[ i, 'Date']
 
-        tmp_table = pd.read_csv( f'01-data\\01-historical\\HorseSR\\{HorseName}.csv')
+        tmp_table = pd.read_csv( f'01-data/02-horses-single-race/{HorseName}.csv')
 
         tmp_table = tmp_table[ ['RDate', 'LastRace_nDays', 'PreviousPlace', 'AvgPlace3', 'AvgPlace5', 'RRating', 'WeightDiff']]
         tmp_table[ 'RDate'] = pd.to_datetime( tmp_table[ 'RDate'], format = '%Y-%m-%d')
@@ -131,4 +131,4 @@ for i in range( len( df_merged_jth)):
 # ---------- Output ----------
 df_merged_jth = df_merged_jth.replace( '--', 0)
 df_merged_jth = df_merged_jth.fillna( 0)
-df_merged_jth.to_csv( '01-data\\data-merged_20220910.csv', encoding = 'utf-8_sig')
+df_merged_jth.to_csv( '01-data/data-merged_20221218.csv', encoding = 'utf-8_sig')

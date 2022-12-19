@@ -13,7 +13,7 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 html_link = 'https://racing.hkjc.com/racing/information/Chinese/Trainers/TrainerRanking.aspx'
 
-Browser = webdriver.Chrome( options = options, executable_path = 'C:\\Users\\User\\Documents\\ChromeDriver\\chromedriver.exe')
+Browser = webdriver.Chrome( options = options, executable_path = 'C:\\Users\\User\\Documents\\VisualStudioCode\\WebScrappingTutorial\\chromedriver_win32_108\\chromedriver.exe')
 Browser.get( html_link)
 time.sleep( 5)
 
@@ -25,4 +25,4 @@ df_trainer_list_pd = pd.DataFrame( df_trainer_list[1])
 df_trainer_list_pd = df_trainer_list_pd.set_axis ( [ 'TrainerName', 'No_1st', 'No_2nd', 'No_3rd', 'No_4th', 'No_5th', 'TotalRides', 'TotalStakes'], axis = 1)
 df_trainer_list_pd = df_trainer_list_pd[ df_trainer_list_pd[ 'TrainerName'] != '其他'].dropna()
 
-df_trainer_list_pd.to_csv( 'Trainer.csv', encoding = 'utf-8_sig')
+df_trainer_list_pd.to_csv( '01-data/basic-trainer.csv', encoding = 'utf-8_sig')
