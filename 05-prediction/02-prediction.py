@@ -21,7 +21,7 @@ from classes import *
 
 def main():
     pipe_rfc_opt, pipe_logreg_opt, pipe_lsvc_opt = model_training()
-    future_input = pd.read_csv( '05-prediction/01-preprocessed_20221130.csv')
+    future_input = pd.read_csv( '05-prediction/01-preprocessed_20221221.csv')
     y_hat_rfc = pipe_rfc_opt.predict( future_input)
     y_hat_logreg = pipe_logreg_opt.predict( future_input)
     y_hat_lsvc = pipe_lsvc_opt.predict( future_input)

@@ -5,13 +5,13 @@
 This script takes the raw data for prediction and transform them into the form our models can read.
 
 Usage:
-01-data-prep.py --race_date=<race_date>
+    01-data-prep.py --race_date=<race_date>
 
 Options:
---race_date=<race_date>     Date of the race.
+    --race_date=<race_date>     Date of the race.
 
 Example:
-python 05-prediction/01-data-prep.py --race_date='2022-12-07'
+    python 05-prediction/01-data-prep.py --race_date='2022-12-07'
 '''
 
 import numpy as np
@@ -21,10 +21,10 @@ from docopt import docopt
 opt = docopt(__doc__)
 
 def main( race_date):
-    df_race = pd.read_csv( '../05-prediction/00-future-input.csv')
-    df_horse = pd.read_csv( '../01-data/basic-horse.csv') # Retired horse is not needed becuase only current horses are in the race.
-    df_jockey = pd.read_csv( '../01-data/basic-jockey.csv')
-    df_trainer = pd.read_csv( '../01-data/basic-trainer.csv')
+    df_race = pd.read_csv( '05-prediction/00-future-input.csv')
+    df_horse = pd.read_csv( '01-data/basic-horse.csv') # Retired horse is not needed becuase only current horses are in the race.
+    df_jockey = pd.read_csv( '01-data/basic-jockey.csv')
+    df_trainer = pd.read_csv( '01-data/basic-trainer.csv')
 
     df_race_tr = df_race.loc[ :, ~ df_race.columns.str.startswith( 'G_')]
 
@@ -141,7 +141,7 @@ def main( race_date):
     X_norm.columns = list( map( lambda x: '_'.join( [x, 'norm']), X.columns))
     X_comb = pd.concat( [ df_merged_jth, X_norm], axis = 1)
 
-    X_comb.to_csv( '../05-prediction/01-preprocessed_testing.csv', encoding = 'utf-8_sig')
+    X_comb.to_csv( '05-prediction/01-preprocessed_20221221.csv', encoding = 'utf-8_sig')
 
 
 def to_int( x):
