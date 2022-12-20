@@ -69,12 +69,12 @@ Cross-validation and testing results is showed in the table below.
 
 |       | mean train precision | mean test precision | mean train recall | mean test recall | mean train f1 | mean test f1|
 | --- | ---- | ---- | ---- | ---- | ---- | ---- |
-| KNN | 0.77 | 0.68 | 0.06 | 0.05 | 0.11 | 0.10 |
-| SVC | 1.00 | 0.43 | 0.84 | 1.00 | 0.91 | 0.17 |
-| RFC | 0.96 | 0.54 | 0.58 | 0.19 | 0.72 | 0.28 |
-| Naive Bayes | 0.48 | 0.47 | 0.18 | 0.17 | 0.26 | 0.25 |
+| KNN | 0.75 | 0.69 | 0.09 | 0.08 | 0.16 | 0.15 |
+| SVC | 0.20 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| RFC | 0.97 | 0.55 | 0.46 | 0.18 | 0.63 | 0.27 |
+| Naive Bayes | 0.51 | 0.51 | 0.16 | 0.15 | 0.24 | 0.23 |
 | Logistic Regression | 0.65 | 0.63 | 0.15 | 0.15 | 0.24 | 0.24 |
-| Linear SVC | 0.71 | 0.72 | 0.11 | 0.11 | 0.20 | 0.19 |
+| Linear SVC | 0.72 | 0.72 | 0.11 | 0.11 | 0.20 | 0.20 |
 
 **Table 1: Cross-validation results**
 
