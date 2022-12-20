@@ -31,7 +31,7 @@ bin/05-rfc: 02-model/05-rfc.py bin/01-cleaned-data bin/02-column-transformer
 	python 02-model/05-rfc.py
 
 # RFC Training
-bin/05-rfc-test: 02-model/05-rfc-test.py bin/04-rfc bin/01-cleaned-data bin/02-column-transformer 02-model/thresholds_used.csv
+bin/05-rfc-test: 02-model/05-rfc-test.py bin/05-rfc bin/01-cleaned-data bin/02-column-transformer 02-model/thresholds_used.csv
 	python 02-model/05-rfc-test.py
 
 # NB Training
