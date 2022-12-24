@@ -34,7 +34,8 @@ def main():
     future_input[ 'lsvc'] = y_hat_lsvc
     future_input[ 'vote'] = y_hat_vote
     future_input[ 'any'] = y_hat_any
-    future_input[ ['Race', 'HorseNo', 'HorseName', 'WinOdds', 'rfc', 'logreg', 'lsvc', 'vote', 'any']].to_csv( '05-prediction/03-result.csv', encoding = 'utf-8_sig')
+    future_input[ ['Race', 'HorseNo', 'HorseName', 'WinOdds', 'rfc', 'logreg', 'lsvc', 'vote', 'any']][ future_input[ 'any'] == True].to_csv( '05-prediction/03-result.csv', encoding = 'utf-8_sig')
+    print( future_input[ ['Race', 'HorseNo', 'HorseName', 'WinOdds', 'rfc', 'logreg', 'lsvc', 'vote', 'any']][ future_input[ 'any'] == True])
 
 def model_training():
     df_train = pd.read_csv( '01-data/train.csv')

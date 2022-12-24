@@ -82,7 +82,7 @@ def main( race_date):
         try:
             HorseName = df_merged_jth.loc[ i, 'HorseName']
             DeclaredHorseWeight = df_merged_jth.loc[ i, 'DeclaredHorseWeight']
-            tmp_table = pd.read_csv( f'01-data/horse-race-history/{HorseName}.csv')
+            tmp_table = pd.read_csv( f'01-data/02-horses-single-race/{HorseName}.csv')
             tmp_table = tmp_table[ ['RDate', 'LastRace_nDays', 'RPlace', 'PreviousPlace', 'AvgPlace3', 'AvgPlace5', 'RRating', 'Weight','WeightDiff']]
             tmp_table[ 'RDate'] = pd.to_datetime( tmp_table[ 'RDate'], format = '%Y-%m-%d')
         except:
