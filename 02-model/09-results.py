@@ -12,12 +12,34 @@ from sklearn.metrics import classification_report, confusion_matrix, precision_r
 from joblib import dump, load
 import pickle
 
+from functions import *
+from classes import *
+
 def main():
     knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict = read_results()
     cv_df = cv_results( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict)
     cv_df.to_csv( '02-model/02-saved-scores/07-cross-validation-results.csv')
     print_best_parameters( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict)
     test_scores_df = test_scores( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict)
+
+    # For voting machine
+    df_train = pd.read_csv( '01-data/train.csv')
+    df_test = pd.read_csv( '01-data/test.csv')
+    X_train, y_train = df_train.drop( 'Winner', axis = 1), df_train[ 'Winner']
+    X_test, y_test = df_test.drop( 'Winner', axis = 1), df_test[ 'Winner']
+
+    pipe_rfc_opt, pipe_logreg_opt, pipe_lsvc_opt = model_training()
+    y_hat_rfc_opt = pipe_rfc_opt.predict( X_test)
+    y_hat_logreg_opt = pipe_logreg_opt.predict( X_test)
+    y_hat_lsvc_opt = pipe_lsvc_opt.predict( X_test)
+    vote = y_hat_rfc_opt.astype( 'int') + y_hat_logreg_opt.astype( 'int') + y_hat_lsvc_opt.astype( 'int')
+    y_hat_vote = vote > 1
+    y_hat_any = vote > 0
+    test_scores_vote = test_scoring_metrics( y_test, y_hat_vote)
+    test_scores_any = test_scoring_metrics( y_test, y_hat_any)
+    test_scores_df[ 'Vote'] = pd.Series( test_scores_vote).round( 2)
+    test_scores_df[ 'Any'] = pd.Series( test_scores_any).round( 2)
+
     test_scores_df.to_csv( '02-model/02-saved-scores/08-test-results.csv')
 
 def read_results():
@@ -67,6 +89,67 @@ def test_scores( knn_dict, svc_dict, rfc_dict, nb_dict, logreg_dict, lsvc_dict):
         'LinearSVC': pd.Series( lsvc_dict[ 'test_scores'])
     }).round( 2)
     return test_scores_df
+
+# For voting machine
+def model_training():
+    df_train = pd.read_csv( '01-data/train.csv')
+    df_test = pd.read_csv( '01-data/test.csv')
+    X_train, y_train = df_train.drop( 'Winner', axis = 1), df_train[ 'Winner']
+    X_test, y_test = df_test.drop( 'Winner', axis = 1), df_test[ 'Winner']
+
+    column_transformer = load( '02-model/column_transformer.joblib')
+    
+    with open( '02-model/02-saved-scores/03-rfc_dict.pkl', 'rb') as f:
+        rfc_dict = pickle.load( f)
+    best_params_rfc = rfc_dict[ 'best_params']
+    thld_rfc = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'RFC_pre'])
+
+    with open( '02-model/02-saved-scores/05-logreg_dict.pkl', 'rb') as f:
+        logreg_dict = pickle.load( f)
+    best_params_logreg = logreg_dict[ 'best_params']
+    thld_logreg = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'LogReg_pre'])
+
+    with open( '02-model/02-saved-scores/06-lsvc_dict.pkl', 'rb') as f:
+        lsvc_dict = pickle.load( f)
+    best_params_lsvc = lsvc_dict[ 'best_params']
+    thld_lsvc = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'LinearSVC_pre'])
+
+    pipe_rfc_opt = final_rfc( column_transformer, best_params_rfc, thld_rfc)
+    pipe_logreg_opt = final_logreg( column_transformer, best_params_logreg, thld_logreg)
+    pipe_lsvc_opt = final_lsvc( column_transformer, best_params_lsvc, thld_lsvc)
+
+    pipe_rfc_opt.fit( X_train, y_train)
+    pipe_logreg_opt.fit( X_train, y_train)
+    pipe_lsvc_opt.fit( X_train, y_train)
+
+    return pipe_rfc_opt, pipe_logreg_opt, pipe_lsvc_opt
+
+def final_rfc( column_transformer, best_params, thld):
+    pipe_rfc_opt = make_pipeline( column_transformer,
+                              RFC_thld( n_estimators = best_params[ 'rfc_thld__n_estimators'],
+                                        max_features = best_params[ 'rfc_thld__max_features'],
+                                        max_depth = best_params[ 'rfc_thld__max_depth'],
+                                        criterion = best_params[ 'rfc_thld__criterion'],
+                                        bootstrap = best_params[ 'rfc_thld__bootstrap'],
+                                        threshold = thld,
+                                        random_state = 918))
+    return pipe_rfc_opt
+
+def final_logreg( column_transformer, best_params, thld):
+    pipe_logreg_opt = make_pipeline( column_transformer,
+                                     LogReg_thld( C = best_params[ 'logreg_thld__C'],
+                                                  l1_ratio = best_params[ 'logreg_thld__l1_ratio'],
+                                                  threshold = thld,
+                                                  random_state = 918))
+    return pipe_logreg_opt
+
+def final_lsvc( column_transformer, best_params, thld):
+    pipe_lsvc_opt = make_pipeline( column_transformer,
+                                   LinearSVC_thld( C = best_params[ 'linearsvc_thld__C'],
+                                                   threshold = thld,
+                                                   random_state = 918))
+
+    return pipe_lsvc_opt
 
 if __name__ == '__main__':
     main()

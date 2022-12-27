@@ -45,17 +45,17 @@ def model_training():
 
     column_transformer = load( '02-model/column_transformer.joblib')
     
-    with open( '02-model/02-saved-scores/03-rfc_dict_tmp.pkl', 'rb') as f:
+    with open( '02-model/02-saved-scores/03-rfc_dict.pkl', 'rb') as f:
         rfc_dict = pickle.load( f)
     best_params_rfc = rfc_dict[ 'best_params']
     thld_rfc = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'RFC_pre'])
 
-    with open( '02-model/02-saved-scores/05-logreg_dict_tmp.pkl', 'rb') as f:
+    with open( '02-model/02-saved-scores/05-logreg_dict.pkl', 'rb') as f:
         logreg_dict = pickle.load( f)
     best_params_logreg = logreg_dict[ 'best_params']
     thld_logreg = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'LogReg_pre'])
 
-    with open( '02-model/02-saved-scores/06-lsvc_dict_tmp.pkl', 'rb') as f:
+    with open( '02-model/02-saved-scores/06-lsvc_dict.pkl', 'rb') as f:
         lsvc_dict = pickle.load( f)
     best_params_lsvc = lsvc_dict[ 'best_params']
     thld_lsvc = float( pd.read_csv( '02-model/thresholds_used.csv', index_col = 0).loc[ 'LinearSVC_pre'])

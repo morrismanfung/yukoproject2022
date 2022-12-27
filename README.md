@@ -80,16 +80,18 @@ Cross-validation and testing results is showed in the table below.
 
 |     | precision | recall | f1 |
 | --- | ---- | ---- | ---- |
-| KNN | 0.70 | 0.07 | 0.13 |
-| SVC | 0.45 | 0.12 | 0.19 |
-| RFC | 0.53 | 0.18 | 0.27 |
-| Naive Bayes | 0.44 | 0.17 | 0.25 |
-| Logistic Regression | 0.6 | 0.15 | 0.24 |
-| Linear SVC | 0.67 | 0.10 | 0.18 |
+| KNN | 0.65 | 0.06 | 0.12 |
+| SVC | 0.57 | 0.12 | 0.20 |
+| RFC | 0.63 | 0.11 | 0.19 |
+| Naive Bayes | 0.43 | 0.08 | 0.13 |
+| Logistic Regression | 0.64 | 0.16 | 0.25 |
+| Linear SVC | 0.67 | 0.10 | 0.25 |
+| Vote | 0.63 | 0.15 | 0.24 |
+| Any | 0.56 | 0.19 | 0.28 |
 
 **Table 2: Testing results**
 
-It is determined that RFC, logistic regression and linear svc work the best. In the next stage, we will explore whether a voting machine should be introduced to further improve performance.
+It is determined that RFC, logistic regression and linear svc work the best. A voting mahcine was built manually using this 3 models, in which a positive signal will be returned when at least 2 models give a positive prediction. In the table above, the row `Vote` shows the performance of the voting machine. The row `Any` indicates testing scores when a union (OR) rule is used, in which a positive signal is returned as long as any of the models return a signal. The voting machine performs worse than a simple logistic regression model. Thus, we decided to use the logistic regression model per se at this stage.
 
 ## Discussion
 
