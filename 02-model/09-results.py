@@ -35,8 +35,8 @@ def main():
     vote = y_hat_rfc_opt.astype( 'int') + y_hat_logreg_opt.astype( 'int') + y_hat_lsvc_opt.astype( 'int')
     y_hat_vote = vote > 1
     y_hat_any = vote > 0
-    test_scores_vote = test_scoring_metrics( y_test, y_hat_vote)
-    test_scores_any = test_scoring_metrics( y_test, y_hat_any)
+    test_scores_vote = test_scoring_metrics( y_test, y_hat_vote, X_test)
+    test_scores_any = test_scoring_metrics( y_test, y_hat_any, X_test)
     test_scores_df[ 'Vote'] = pd.Series( test_scores_vote).round( 2)
     test_scores_df[ 'Any'] = pd.Series( test_scores_any).round( 2)
 
