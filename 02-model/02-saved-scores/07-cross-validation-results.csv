@@ -1,7 +1,7 @@
 ,KNN,SVC,RFC,NB,LogReg,LinearSVC
 ,mean,mean,mean,mean,mean,mean
-fit_time,0.01,2.75,9.25,0.53,0.19,0.2
-score_time,0.57,0.58,0.11,0.02,0.02,0.01
+fit_time,0.01,2.84,9.42,0.54,0.18,0.23
+score_time,0.57,0.59,0.11,0.02,0.01,0.02
 test_precision,0.69,0.68,0.63,0.58,0.63,0.6
 train_precision,0.75,0.7,0.99,0.58,0.63,0.61
 test_recall,0.08,0.14,0.14,0.11,0.17,0.22
