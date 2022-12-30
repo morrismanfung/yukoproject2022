@@ -141,7 +141,8 @@ def main( race_date):
     X_norm.columns = list( map( lambda x: '_'.join( [x, 'norm']), X.columns))
     X_comb = pd.concat( [ df_merged_jth, X_norm], axis = 1)
 
-    X_comb.to_csv( '05-prediction/01-preprocessed_20221221.csv', encoding = 'utf-8_sig')
+    date_string = race_date.replace( '-', '')
+    X_comb.to_csv( f'05-prediction/01-preprocessed_{date_string}.csv', encoding = 'utf-8_sig')
 
 
 def to_int( x):

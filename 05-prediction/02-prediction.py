@@ -2,6 +2,19 @@
 # 2022-12-19
 # Usage: python 05-prediction/02-prediction.py
 
+'''
+This script takes the cleaned data and makes the prediction.
+
+Usage:
+    02-prediction.py --race_date=<race_date>
+
+Options:
+    --race_date=<race_date>     Date of the race.
+
+Example:
+    python 05-prediction/01-prediction.py --race_date='2022-12-07'
+'''
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,9 +32,13 @@ import sys
 sys.path.append('05-prediction/')
 from classes import *
 
-def main():
+from docopt import docopt
+opt = docopt(__doc__)
+
+def main( race_date):
+    date_string = race_date.replace( '-', '')
     pipe_rfc_opt, pipe_logreg_opt, pipe_lsvc_opt = model_training()
-    future_input = pd.read_csv( '05-prediction/01-preprocessed_20221221.csv')
+    future_input = pd.read_csv( f'05-prediction/01-preprocessed_{ date_string}.csv')
     y_hat_rfc = pipe_rfc_opt.predict( future_input)
     y_hat_logreg = pipe_logreg_opt.predict( future_input)
     y_hat_lsvc = pipe_lsvc_opt.predict( future_input)
@@ -35,7 +52,7 @@ def main():
     future_input[ 'vote'] = y_hat_vote
     future_input[ 'any'] = y_hat_any
     future_input[ ['Race', 'HorseNo', 'HorseName', 'WinOdds', 'rfc', 'logreg', 'lsvc', 'vote', 'any']][ future_input[ 'any'] == True].to_csv( '05-prediction/03-result.csv', encoding = 'utf-8_sig')
-    print( future_input[ ['Race', 'HorseNo', 'HorseName', 'WinOdds', 'rfc', 'logreg', 'lsvc', 'vote', 'any']][ future_input[ 'any'] == True])
+    print( future_input[ ['Race', 'HorseNo', 'HorseName', 'WinOdds', 'rfc', 'logreg', 'lsvc', 'vote', 'any']][ future_input[ 'logreg'] == True])
 
 def model_training():
     df_train = pd.read_csv( '01-data/train.csv')
@@ -98,4 +115,4 @@ def final_lsvc( column_transformer, best_params, thld):
     return pipe_lsvc_opt
 
 if __name__ == '__main__':
-    main()
+    main( opt[ '--race_date'])

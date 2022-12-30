@@ -1,7 +1,4 @@
 ﻿,Race,HorseNo,HorseName,WinOdds,rfc,logreg,lsvc,vote,any
-0,1,1,吉吉利高,17.0,False,False,True,False,True
-82,7,2,勝得出色,3.8,True,False,False,False,True
-106,8,12,鹿鼎記,2.7,False,True,True,True,True
-112,9,4,盈嵐,2.6,False,True,True,True,True
-131,10,9,美麗宇宙,4.2,False,False,True,False,True
-132,10,10,包裝必勝,4.1,True,True,True,True,True
+13,2,2,健康快駒,4.1,True,True,True,True,True
+40,4,9,創福威,2.6,False,False,True,False,True
+46,5,3,久久為攻,2.1,True,True,True,True,True
