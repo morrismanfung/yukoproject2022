@@ -88,7 +88,7 @@ def model_testing( pipe_knn_opt, X_train, y_train, X_test, y_test):
     except:
         os.makedirs( os.path.dirname( '02-model/02-saved-scores/'))
         classification_report_.to_csv( '02-model/02-saved-scores/01-knn_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_knn_opt)
+    return test_scoring_metrics( y_test, y_hat_knn_opt, X_test)
 
 if __name__ == '__main__':
     main()

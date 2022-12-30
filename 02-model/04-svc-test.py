@@ -37,7 +37,7 @@ def main():
 
     pipe_svc_opt = final_svc( column_transformer, best_params, thld)
     svc_dict[ 'cv_scores'] = cross_validate( pipe_svc_opt, X_train, y_train, cv = 5, scoring = cv_scoring_metrics, return_train_score = True)
-    svc_dict[ 'test_scores'] = model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test, thld)
+    svc_dict[ 'test_scores'] = model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test)
 
     dump( svc_dict, '02-model/02-saved-scores/02-svc_dict.joblib')
     with open( '02-model/02-saved-scores/02-svc_dict.pkl', 'wb') as f:
@@ -55,7 +55,7 @@ def final_svc( column_transformer, best_params, thld):
 
     return pipe_svc_opt
 
-def model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test, thld):
+def model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test):
     pipe_svc_opt.fit( X_train, y_train)
     y_hat_svc_opt = pipe_svc_opt.predict( X_test)
 
@@ -64,7 +64,7 @@ def model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test, thld):
 
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_svc_opt, output_dict = True))
     classification_report_.to_csv( '02-model/02-saved-scores/02-svc_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_svc_opt)
+    return test_scoring_metrics( y_test, y_hat_svc_opt, X_train)
 
 if __name__ == '__main__':
     main()

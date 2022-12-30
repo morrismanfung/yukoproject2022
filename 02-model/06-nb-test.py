@@ -37,7 +37,7 @@ def main():
 
     pipe_nb_opt = final_nb( column_transformer, thld)
     nb_dict[ 'cv_scores'] = cross_validate( pipe_nb_opt, X_train, y_train, cv = 5, scoring = cv_scoring_metrics, return_train_score = True)
-    nb_dict[ 'test_scores'] = model_testing( pipe_nb_opt, X_train, y_train, X_test, y_test, thld)
+    nb_dict[ 'test_scores'] = model_testing( pipe_nb_opt, X_train, y_train, X_test, y_test)
 
     dump( nb_dict, '02-model/02-saved-scores/04-nb_dict.joblib')
     with open( '02-model/02-saved-scores/04-nb_dict.pkl', 'wb') as f:
@@ -52,14 +52,14 @@ def final_nb( column_transformer, thld):
                                  NB_thld( threshold = thld))
     return pipe_nb_opt
 
-def model_testing( pipe_nb_opt, X_train, y_train, X_test, y_test, thld):
+def model_testing( pipe_nb_opt, X_train, y_train, X_test, y_test):
     pipe_nb_opt.fit( X_train, y_train)
     y_hat_nb = pipe_nb_opt.predict( X_test)
     confusion_matrix_ = better_confusion_matrix( y_test, y_hat_nb, labels = [ True, False])
     confusion_matrix_.to_csv( '02-model/02-saved-scores/04-nb_confusion_matrix.csv')
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_nb, output_dict = True))
     classification_report_.to_csv( '02-model/02-saved-scores/04-nb_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_nb)
+    return test_scoring_metrics( y_test, y_hat_nb, X_train)
 
 if __name__ == '__main__':
     main()

@@ -37,7 +37,7 @@ def main():
     
     pipe_rfc_opt = final_rfc( column_transformer, best_params, thld)
     rfc_dict[ 'cv_scores'] = cross_validate( pipe_rfc_opt, X_train, y_train, cv = 5, scoring = cv_scoring_metrics, return_train_score = True)
-    rfc_dict[ 'test_scores'] = model_testing( pipe_rfc_opt, X_train, y_train, X_test, y_test, thld)
+    rfc_dict[ 'test_scores'] = model_testing( pipe_rfc_opt, X_train, y_train, X_test, y_test)
 
     dump( rfc_dict, '02-model/02-saved-scores/03-rfc_dict.joblib')
     with open( '02-model/02-saved-scores/03-rfc_dict.pkl', 'wb') as f:
@@ -58,14 +58,14 @@ def final_rfc( column_transformer, best_params, thld):
     return pipe_rfc_opt
 
 
-def model_testing( pipe_rfc_opt, X_train, y_train, X_test, y_test, thld):
+def model_testing( pipe_rfc_opt, X_train, y_train, X_test, y_test):
     pipe_rfc_opt.fit( X_train, y_train)
     y_hat_rfc_opt = pipe_rfc_opt.predict( X_test)
     confusion_matrix_ = better_confusion_matrix( y_test, y_hat_rfc_opt, labels = [ True, False])
     confusion_matrix_.to_csv( '02-model/02-saved-scores/03-rfc_confusion_matrix.csv')
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_rfc_opt, output_dict = True))
     classification_report_.to_csv( '02-model/02-saved-scores/03-rfc_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_rfc_opt)
+    return test_scoring_metrics( y_test, y_hat_rfc_opt, X_train)
 
 if __name__ == '__main__':
     main()

@@ -37,7 +37,7 @@ def main():
     
     pipe_logreg_opt = final_logreg( column_transformer, best_params, thld)
     logreg_dict[ 'cv_scores'] = cross_validate( pipe_logreg_opt, X_train, y_train, cv = 5, scoring = cv_scoring_metrics, return_train_score = True)
-    logreg_dict[ 'test_scores'] = model_testing( pipe_logreg_opt, X_train, y_train, X_test, y_test, thld)
+    logreg_dict[ 'test_scores'] = model_testing( pipe_logreg_opt, X_train, y_train, X_test, y_test)
 
     dump( logreg_dict, '02-model/02-saved-scores/05-logreg_dict.joblib')
     with open( '02-model/02-saved-scores/05-logreg_dict.pkl', 'wb') as f:
@@ -54,14 +54,14 @@ def final_logreg( column_transformer, best_params, thld):
                                                   random_state = 918))
     return pipe_logreg_opt
 
-def model_testing( pipe_logreg_opt, X_train, y_train, X_test, y_test, thld):
+def model_testing( pipe_logreg_opt, X_train, y_train, X_test, y_test):
     pipe_logreg_opt.fit( X_train, y_train)
     y_hat_logreg_opt = pipe_logreg_opt.predict( X_test)
     confusion_matrix_ = better_confusion_matrix( y_test, y_hat_logreg_opt, labels = [ True, False])
     confusion_matrix_.to_csv( '02-model/02-saved-scores/05-logreg_confusion_matrix.csv')
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_logreg_opt, output_dict = True))
     classification_report_.to_csv( '02-model/02-saved-scores/05-logreg_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_logreg_opt)
+    return test_scoring_metrics( y_test, y_hat_logreg_opt, X_train)
 
 if __name__ == '__main__':
     main()
