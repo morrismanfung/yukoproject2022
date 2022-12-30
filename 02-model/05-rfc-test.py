@@ -65,7 +65,7 @@ def model_testing( pipe_rfc_opt, X_train, y_train, X_test, y_test):
     confusion_matrix_.to_csv( '02-model/02-saved-scores/03-rfc_confusion_matrix.csv')
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_rfc_opt, output_dict = True))
     classification_report_.to_csv( '02-model/02-saved-scores/03-rfc_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_rfc_opt, X_train)
+    return test_scoring_metrics( y_test, y_hat_rfc_opt, X_test)
 
 if __name__ == '__main__':
     main()

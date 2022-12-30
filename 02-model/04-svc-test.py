@@ -64,7 +64,7 @@ def model_testing( pipe_svc_opt, X_train, y_train, X_test, y_test):
 
     classification_report_ = pd.DataFrame( classification_report( y_test, y_hat_svc_opt, output_dict = True))
     classification_report_.to_csv( '02-model/02-saved-scores/02-svc_classification_report.csv')
-    return test_scoring_metrics( y_test, y_hat_svc_opt, X_train)
+    return test_scoring_metrics( y_test, y_hat_svc_opt, X_test)
 
 if __name__ == '__main__':
     main()
